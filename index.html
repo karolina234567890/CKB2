@@ -3,1293 +3,937 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knowledge Bank — Design Console</title>
+<title>Knowledge Bank — Planning Console</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#F1F5F9;color:#1E293B;font-size:14px}
-:root{
-  --blue:#2563EB;--blue-h:#1D4ED8;--blue-l:#EFF6FF;--blue-b:#BFDBFE;
-  --green:#10B981;--green-l:#ECFDF5;--green-t:#065F46;--green-b:#A7F3D0;
-  --red:#EF4444;--red-l:#FEE2E2;--red-t:#991B1B;
-  --amber:#D97706;--amber-l:#FEF3C7;--amber-t:#92400E;
-  --gray:#64748B;--gray-l:#F8FAFC;--border:#E2E8F0;--white:#fff;
-  --sh:0 1px 3px rgba(0,0,0,.08);--sh2:0 4px 12px rgba(0,0,0,.1);
+:root {
+  --blue: #2563EB;
+  --blue-hover: #1D4ED8;
+  --blue-light: #EFF6FF;
+  --blue-border: #BFDBFE;
+  --green: #10B981;
+  --green-light: #F0FDF4;
+  --green-border: #BBF7D0;
+  --green-text: #166534;
+  --red: #DC2626;
+  --red-light: #FEE2E2;
+  --amber: #D97706;
+  --amber-light: #FEF3C7;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-700: #374151;
+  --gray-900: #111827;
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+  --shadow: 0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06);
 }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--gray-50);color:var(--gray-900);font-size:14px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;height:52px;background:var(--white);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 20px;gap:14px;z-index:100}
-.nav-logo{font-weight:700;font-size:15px;color:var(--blue);display:flex;align-items:center;gap:8px}
-.nav-sep{width:1px;height:24px;background:var(--border)}
-.nav-sel{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--gray);
-  padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--white);cursor:pointer}
-.nav-sel select{border:none;outline:none;font-size:13px;color:#1E293B;background:transparent;
-  font-family:inherit;cursor:pointer;max-width:140px}
-.nav-sp{flex:1}
-.nav-icon{width:32px;height:32px;border-radius:50%;background:var(--gray-l);border:none;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray);font-size:15px}
+/* TOP NAV */
+.topnav{height:52px;background:#fff;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;padding:0 16px;flex-shrink:0;z-index:100;gap:0}
+.logo{font-weight:700;font-size:15px;color:var(--blue);margin-right:20px;display:flex;align-items:center;gap:8px}
+.nav-sep{width:1px;height:20px;background:var(--gray-200);margin:0 10px}
+.ctx-item{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s}
+.ctx-item:hover{background:var(--gray-50)}
+.ctx-label{color:var(--gray-400);font-size:12px}
+.ctx-val{font-weight:500;font-size:13px}
+.ctx-val.muted{color:var(--gray-400)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.icon-btn{width:30px;height:30px;border-radius:50%;background:var(--gray-100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray-500);font-size:14px;transition:background .15s}
+.icon-btn:hover{background:var(--gray-200)}
+.avatar{width:30px;height:30px;border-radius:50%;background:#6366F1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
 
 /* LAYOUT */
-.layout{display:flex;margin-top:52px;min-height:calc(100vh - 52px)}
-.sidebar{width:56px;background:var(--white);border-right:1px solid var(--border);
-  padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:4px;
-  position:sticky;top:52px;height:calc(100vh - 52px);flex-shrink:0}
-.sb{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:var(--gray);font-size:17px;transition:background .12s,color .12s;border:none;background:none}
-.sb:hover{background:var(--gray-l)}
-.sb.on{background:var(--blue-l);color:var(--blue)}
-.main{flex:1;padding:28px 32px;max-width:1080px}
+.app-body{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:52px;background:#fff;border-right:1px solid var(--gray-200);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:2px;flex-shrink:0}
+.sb-item{width:38px;height:38px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray-500);font-size:16px;transition:background .15s,color .15s}
+.sb-item:hover{background:var(--gray-100);color:var(--gray-900)}
+.sb-item.active{background:var(--blue-light);color:var(--blue)}
+.sb-sep{width:28px;height:1px;background:var(--gray-200);margin:4px 0}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:24px}
+.main::-webkit-scrollbar{width:5px}
+.main::-webkit-scrollbar-thumb{background:var(--gray-200);border-radius:3px}
 
 /* PAGE HEADER */
-.ph1{font-size:22px;font-weight:700;color:#0F172A;margin-bottom:4px}
-.ph2{font-size:13px;color:var(--gray);margin-bottom:22px}
+.page-h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.page-sub{color:var(--gray-500);font-size:13px;margin-bottom:24px}
 
 /* TABS */
-.tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:24px;gap:0}
-.tab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--gray);cursor:pointer;
-  border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .12s,border-color .12s}
-.tab:hover{color:#334155}
-.tab.on{color:var(--blue);border-bottom-color:var(--blue)}
+.tabs{display:flex;border-bottom:1px solid var(--gray-200);margin-bottom:24px}
+.tab{padding:9px 16px;cursor:pointer;color:var(--gray-500);font-weight:500;font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px;transition:color .15s}
+.tab:hover{color:var(--gray-900)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-ct{font-size:11px;background:var(--gray-100);padding:1px 6px;border-radius:10px;border:1px solid var(--gray-200)}
+.tab.active .tab-ct{background:var(--blue-light);color:var(--blue);border-color:var(--blue-border)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
 
-/* PERM BANNER */
-.pb{padding:10px 14px;border-radius:8px;font-size:13px;display:flex;align-items:center;
-  gap:8px;margin-bottom:20px;border:1px solid}
-.pb.edit{background:var(--green-l);color:var(--green-t);border-color:var(--green-b)}
-.pb.ro{background:var(--gray-l);color:var(--gray);border-color:var(--border)}
+/* PERMISSION BANNER */
+.perm-banner{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:var(--radius);margin-bottom:18px;font-size:13px}
+.perm-banner.edit{background:var(--green-light);color:var(--green-text);border:1px solid var(--green-border)}
+.perm-banner.ro{background:var(--gray-50);color:var(--gray-500);border:1px solid var(--gray-200)}
 
-/* SELECTOR ROW */
-.sr{display:flex;align-items:center;gap:10px;margin-bottom:20px}
-.sr label{font-size:13px;font-weight:500;color:#475569;white-space:nowrap}
-.sr select{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;
-  font-family:inherit;background:var(--white);color:#1E293B;outline:none;min-width:190px;cursor:pointer}
-.sr select:focus{border-color:var(--blue)}
+/* SELECTOR */
+.selector-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.selector-row label{font-size:13px;font-weight:500;color:var(--gray-500);white-space:nowrap}
+.sel{padding:6px 30px 6px 10px;border:1px solid var(--gray-200);border-radius:var(--radius);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 8px center;appearance:none;font-size:13px;font-family:inherit;color:var(--gray-900);cursor:pointer;outline:none;min-width:180px}
+.sel:focus{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-border)}
 
 /* CARD */
-.card{background:var(--white);border:1px solid var(--border);border-radius:12px;
-  margin-bottom:18px;box-shadow:var(--sh)}
-.card-h{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;
-  justify-content:space-between}
-.card-t{font-size:14px;font-weight:600;color:#0F172A}
-.card-s{font-size:12px;color:var(--gray);margin-top:2px}
-.card-b{padding:18px}
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);margin-bottom:18px;overflow:hidden}
+.card-head{padding:14px 18px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:14px;font-weight:600}
+.card-sub{font-size:12px;color:var(--gray-500);margin-top:2px}
+.card-body{padding:18px}
 
-/* UPLOAD */
-.uzone{border:2px dashed #CBD5E1;border-radius:10px;padding:28px;text-align:center;
-  cursor:pointer;transition:border-color .15s,background .15s;margin-bottom:14px}
-.uzone:hover,.uzone.drag{border-color:var(--blue);background:var(--blue-l)}
-.ubtn{display:inline-block;margin-top:10px;padding:8px 16px;background:var(--blue);color:#fff;
-  border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;
-  font-family:inherit;transition:background .15s}
-.ubtn:hover{background:var(--blue-h)}
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--gray-200);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;margin-bottom:14px}
+.upload-zone:hover{border-color:var(--blue);background:var(--blue-light)}
+.upload-zone-icon{font-size:22px;color:var(--gray-400);margin-bottom:6px}
+.upload-zone-text{font-size:13px;color:var(--gray-500)}
+.upload-zone-text b{color:var(--blue)}
+.upload-zone-fmt{font-size:11px;color:var(--gray-400);margin-top:3px}
 
 /* FILE LIST */
-.flist{display:flex;flex-direction:column;gap:8px}
-.frow{display:flex;align-items:center;gap:12px;padding:10px 12px;
-  border:1px solid var(--border);border-radius:8px;background:var(--white);transition:opacity .3s}
-.frow.fading{opacity:0}
-.ficon{width:34px;height:34px;border-radius:7px;background:var(--blue-l);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
-.finfo{flex:1;min-width:0}
-.fname{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fmeta{font-size:11px;color:#94A3B8;margin-top:1px}
-.ftag{background:#F1F5F9;color:#475569;font-size:11px;padding:2px 7px;
-  border-radius:10px;border:1px solid var(--border)}
-.fdel{width:28px;height:28px;border:none;background:transparent;cursor:pointer;
-  color:#94A3B8;border-radius:6px;font-size:16px;display:flex;align-items:center;
-  justify-content:center;transition:color .12s,background .12s}
-.fdel:hover{color:var(--red);background:var(--red-l)}
-
-/* SKELETON */
-@keyframes shi{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skel{background:linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 50%,#F1F5F9 75%);
-  background-size:200% 100%;animation:shi 1.4s infinite;border-radius:10px}
+.file-list{display:flex;flex-direction:column;gap:8px}
+.file-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--gray-200);border-radius:var(--radius);background:#fff}
+.file-ico{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.file-ico.pdf{background:var(--red-light);color:var(--red)}
+.file-ico.docx{background:var(--blue-light);color:var(--blue)}
+.file-ico.pptx{background:var(--amber-light);color:var(--amber)}
+.file-info{flex:1;min-width:0}
+.file-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-meta{font-size:11px;color:var(--gray-400);margin-top:1px}
+.file-cat{display:inline;background:var(--gray-100);padding:1px 6px;border-radius:10px;border:1px solid var(--gray-200);margin-right:4px}
+.file-del{background:none;border:none;cursor:pointer;color:var(--gray-400);padding:4px;border-radius:4px;font-size:13px;transition:color .15s}
+.file-del:hover{color:var(--red)}
 
 /* FACTS HEADER */
-.fhdr{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.fhdr h3{font-size:15px;font-weight:600;color:#0F172A;flex:1}
-.fcnt{font-size:12px;color:var(--gray);background:#F1F5F9;padding:3px 10px;
-  border-radius:10px;white-space:nowrap}
-.fcnt .hp{color:var(--red);font-weight:600}
-.fsrch{padding:7px 11px;border:1px solid var(--border);border-radius:8px;font-size:13px;
-  font-family:inherit;outline:none;width:190px}
-.fsrch:focus{border-color:var(--blue)}
-.atbtn{padding:7px 13px;border:1px solid var(--blue);color:var(--blue);background:var(--white);
-  border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;
-  transition:background .12s;white-space:nowrap}
-.atbtn:hover{background:var(--blue-l)}
+.facts-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.facts-stat{font-size:13px;color:var(--gray-500);flex:1}
+.facts-stat b{color:var(--gray-900)}
+.facts-stat .hp{color:var(--red);font-weight:500}
+.search-box{display:flex;align-items:center;gap:6px;border:1px solid var(--gray-200);border-radius:var(--radius);padding:5px 10px;background:#fff}
+.search-box input{border:none;outline:none;font-size:13px;font-family:inherit;width:180px;color:var(--gray-900)}
+.search-box input::placeholder{color:var(--gray-400)}
+.btn-add-topic{display:flex;align-items:center;gap:5px;padding:5px 10px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-500);font-family:inherit;transition:border-color .15s,color .15s}
+.btn-add-topic:hover{border-color:var(--blue);color:var(--blue)}
 
-/* TOPIC CARD */
-.tc{background:var(--white);border:1px solid var(--border);border-radius:12px;
-  margin-bottom:10px;overflow:hidden;box-shadow:var(--sh);transition:box-shadow .15s}
-.tc:hover{box-shadow:var(--sh2)}
-.tch{display:flex;align-items:center;gap:12px;padding:14px 16px;
-  cursor:pointer;user-select:none}
-.tci{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;
-  justify-content:center;font-size:18px;flex-shrink:0}
-.tcn{flex:1;min-width:0}
-.tcname{font-size:14px;font-weight:600;color:#0F172A}
-.tcdesc{font-size:12px;color:#94A3B8;margin-top:1px}
-.tcb{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.tcct{font-size:12px;font-weight:600;color:#475569;background:#F1F5F9;
-  padding:2px 9px;border-radius:10px;border:1px solid var(--border)}
-.tcdot{width:8px;height:8px;border-radius:50%;background:var(--red)}
-.tcarrow{color:#94A3B8;transition:transform .2s;font-size:13px}
-.tc.open .tcarrow{transform:rotate(180deg)}
+/* TOPICS */
+.topics{display:flex;flex-direction:column;gap:10px}
+.topic-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);overflow:hidden;transition:box-shadow .15s}
+.topic-card:hover{box-shadow:var(--shadow-sm)}
+.topic-hdr{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;cursor:pointer;user-select:none}
+.topic-ico{width:34px;height:34px;border-radius:8px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.topic-info{flex:1}
+.topic-name{font-size:14px;font-weight:600}
+.topic-desc{font-size:12px;color:var(--gray-500);margin-top:2px}
+.topic-ctrl{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:2px}
+.topic-dot{width:7px;height:7px;border-radius:50%;background:var(--red)}
+.topic-badge{font-size:12px;background:var(--gray-100);color:var(--gray-500);padding:2px 7px;border-radius:10px;border:1px solid var(--gray-200);font-weight:500}
+.topic-chevron{font-size:10px;color:var(--gray-400);padding:2px 4px;transition:transform .2s}
+.topic-card.open .topic-chevron{transform:rotate(180deg)}
+.topic-summary{padding:0 16px 14px 60px}
+.topic-summary-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-400);margin-bottom:3px}
+.topic-summary-text{font-size:13px;color:var(--gray-500);line-height:1.5}
+.topic-facts{display:none;border-top:1px solid var(--gray-200)}
+.topic-card.open .topic-facts{display:block}
 
-/* AI SUMMARY */
-.tcsum{padding:0 16px 14px 66px;font-size:13px;color:#475569;font-style:italic;
-  line-height:1.55;border-top:1px solid #F8FAFC}
-.tc.open .tcsum{display:none}
+/* FACT ROWS */
+.fact-row{display:flex;gap:10px;padding:11px 16px;border-bottom:1px dashed var(--gray-200);align-items:flex-start}
+.fact-row:last-of-type{border-bottom:none}
+.fact-row:hover{background:#FAFAFA}
+.fact-check{width:18px;height:18px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;flex-shrink:0;margin-top:2px}
+.fact-body{flex:1;min-width:0}
+.fact-text{font-size:13px;line-height:1.5;margin-bottom:7px;color:var(--gray-900)}
+.fact-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.fact-edit-wrap{display:none}
+.fact-edit-wrap textarea{width:100%;font-size:13px;font-family:inherit;border:1px solid var(--blue);border-radius:var(--radius-sm);padding:6px 8px;outline:none;resize:vertical;margin-bottom:7px;line-height:1.5}
+.edit-actions{display:flex;gap:5px}
 
-/* FACTS BODY */
-.tcbody{display:none;border-top:1px solid var(--border)}
-.tc.open .tcbody{display:block}
+/* PILLS & TAGS */
+.pp{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;cursor:pointer;border:none;font-family:inherit;position:relative}
+.pp.high{background:var(--red-light);color:var(--red)}
+.pp.medium{background:var(--amber-light);color:var(--amber)}
+.pp.low{background:var(--gray-100);color:var(--gray-500)}
+.pp-dd{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow);z-index:50;min-width:150px;display:none}
+.pp-dd.open{display:block}
+.pp-dd-item{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:12px}
+.pp-dd-item:hover{background:var(--gray-50)}
+.pp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.pp-dot.high{background:var(--red)}
+.pp-dot.medium{background:var(--amber)}
+.pp-dot.low{background:var(--gray-400)}
+.src-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:11px;background:var(--gray-100);color:var(--gray-500);border:1px solid var(--gray-200)}
+.hash-tag{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:11px;background:var(--gray-100);color:var(--gray-500);border:1px solid var(--gray-200)}
 
-/* FACT ROW */
-.fr{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;
-  border-bottom:1px dashed #E2E8F0;position:relative;transition:opacity .3s}
-.fr:last-of-type{border-bottom:none}
-.fr.fading{opacity:0}
-.fchk{width:18px;height:18px;border-radius:50%;background:var(--green);flex-shrink:0;
-  margin-top:1px;display:flex;align-items:center;justify-content:center}
-.fbd{flex:1;min-width:0}
-.ftxt{font-size:13px;color:#1E293B;line-height:1.5;margin-bottom:6px}
-.fedit-area{width:100%;padding:6px 9px;border:1px solid var(--blue);border-radius:6px;
-  font-size:13px;font-family:inherit;line-height:1.5;resize:none;outline:none;
-  min-height:58px;margin-bottom:6px;display:none}
-.fmeta2{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.fbtns{display:flex;gap:4px;align-items:center;flex-shrink:0}
-.feditbtn,.fdelbtn{padding:3px 8px;border-radius:5px;font-size:12px;cursor:pointer;
-  border:1px solid var(--border);background:var(--white);font-family:inherit;
-  color:#475569;transition:all .12s}
-.feditbtn:hover{border-color:var(--blue);color:var(--blue)}
-.fdelbtn:hover{border-color:var(--red);color:var(--red);background:var(--red-l)}
-.savebtn{padding:3px 10px;border-radius:5px;font-size:12px;cursor:pointer;border:none;
-  background:var(--blue);color:#fff;font-family:inherit;font-weight:500}
-.savebtn:hover{background:var(--blue-h)}
-.cancelbtn{padding:3px 8px;border-radius:5px;font-size:12px;cursor:pointer;
-  border:1px solid var(--border);background:var(--white);font-family:inherit;color:var(--gray)}
-.save-row{display:flex;gap:6px;margin-top:4px}
-
-/* PRIORITY PILL */
-.ppwrap{position:relative;display:inline-flex}
-.ppbtn{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;
-  border:none;font-family:inherit;display:flex;align-items:center;gap:4px;transition:opacity .12s}
-.ppbtn:hover{opacity:.85}
-.pph{background:var(--red-l);color:var(--red-t)}
-.ppm{background:var(--amber-l);color:var(--amber-t)}
-.ppl{background:#F1F5F9;color:#475569}
-.ppmenu{position:absolute;top:calc(100% + 4px);left:0;background:var(--white);
-  border:1px solid var(--border);border-radius:9px;box-shadow:var(--sh2);
-  z-index:200;min-width:150px;overflow:hidden;display:none}
-.ppmenu.show{display:block}
-.ppopt{padding:8px 13px;font-size:13px;cursor:pointer;display:flex;align-items:center;
-  gap:8px;transition:background .1s}
-.ppopt:hover{background:#F8FAFC}
-.ppdot{width:8px;height:8px;border-radius:50%}
-
-/* TAGS */
-.stag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:#F1F5F9;
-  border:1px solid var(--border);border-radius:20px;font-size:11px;color:#475569}
-.htag{display:inline-flex;padding:3px 8px;background:var(--blue-l);
-  border:1px solid var(--blue-b);border-radius:20px;font-size:11px;color:#1D4ED8}
-.addtag{padding:3px 8px;border:1px dashed #CBD5E1;border-radius:20px;font-size:11px;
-  color:#94A3B8;background:transparent;cursor:pointer;font-family:inherit;
-  transition:border-color .12s,color .12s}
-.addtag:hover{border-color:#94A3B8;color:#475569}
+/* BUTTONS */
+.btn-xs{padding:2px 8px;font-size:11px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:#fff;cursor:pointer;color:var(--gray-500);font-family:inherit;font-weight:500;transition:border-color .15s,color .15s}
+.btn-xs:hover{border-color:var(--blue);color:var(--blue)}
+.btn-xs.prim{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-xs.prim:hover{background:var(--blue-hover)}
+.btn-xs.danger:hover{border-color:var(--red);color:var(--red)}
+.btn-prim{padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-prim:hover{background:var(--blue-hover)}
 
 /* ADD FACT BTN */
-.afbtn{width:calc(100% - 32px);margin:10px 16px 12px;padding:9px;
-  border:2px dashed #E2E8F0;border-radius:9px;background:transparent;
-  font-size:13px;color:#94A3B8;cursor:pointer;font-family:inherit;
-  transition:border-color .15s,color .15s;display:block;text-align:center}
-.afbtn:hover{border-color:#94A3B8;color:#475569}
+.add-fact-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:9px;margin:8px 16px;border:2px dashed var(--gray-200);border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--gray-500);background:none;font-family:inherit;transition:border-color .15s,color .15s;width:calc(100% - 32px)}
+.add-fact-btn:hover{border-color:var(--blue);color:var(--blue)}
 
-/* NEW FACT FORM */
-.nffm{background:#F8FAFC;border-top:1px dashed var(--border);padding:12px 16px;display:none}
-.nffm.show{display:block}
-.nffm textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;
-  font-size:13px;font-family:inherit;resize:none;height:68px;outline:none}
-.nffm textarea:focus{border-color:var(--blue)}
-.nfrow{display:flex;align-items:center;gap:8px;margin-top:7px}
-.nfrow select{padding:5px 9px;border:1px solid var(--border);border-radius:6px;
-  font-size:12px;font-family:inherit;color:#475569;background:var(--white);outline:none}
-
-/* ADD TOPIC FORM */
-.ntfm{background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:12px;
-  padding:14px;margin-bottom:10px;display:none}
-.ntfm.show{display:block}
-.ntfm input{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:7px;
-  font-size:14px;font-family:inherit;outline:none;margin-bottom:8px}
-.ntfm input:focus{border-color:var(--blue)}
-.ntrow{display:flex;gap:8px}
-
-/* CITATION */
-.citwrap{position:relative;display:inline-flex;align-items:center;margin-left:5px;vertical-align:middle}
-.citbtn{width:17px;height:17px;border-radius:50%;background:var(--blue-l);color:#4338CA;
-  display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;
-  cursor:pointer;border:1px solid var(--blue-b);flex-shrink:0;transition:background .12s}
-.citbtn:hover,.citbtn.on{background:#C7D2FE}
-.cittip{position:absolute;bottom:calc(100% + 7px);right:0;width:300px;background:var(--white);
-  border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);
-  z-index:300;padding:12px;display:none;font-size:12px}
-.cittip.show{display:block}
-.cittip h4{font-size:11px;font-weight:700;color:#475569;margin-bottom:8px;
-  text-transform:uppercase;letter-spacing:.05em}
-.cititem{padding:8px 0;border-top:1px solid #F1F5F9}
-.cititem:first-of-type{border-top:none;padding-top:0}
-.ctext{color:#1E293B;margin-bottom:4px;line-height:1.4}
-.cmeta{color:#94A3B8;display:flex;flex-wrap:wrap;gap:4px;margin-bottom:3px}
-.clev{background:#F1F5F9;border-radius:4px;padding:1px 6px;font-size:11px}
-.clink{color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;
-  gap:3px;font-weight:500;cursor:pointer}
-.clink:hover{text-decoration:underline}
-
-/* COPILOT */
-.cptgl{position:fixed;bottom:22px;right:22px;width:46px;height:46px;border-radius:50%;
-  background:var(--blue);color:#fff;border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 14px rgba(37,99,235,.45);font-size:20px;z-index:150;
-  transition:transform .15s}
-.cptgl:hover{transform:scale(1.05)}
-.cppanel{position:fixed;bottom:80px;right:22px;width:360px;background:var(--white);
-  border:1px solid var(--border);border-radius:14px;
-  box-shadow:0 8px 30px rgba(0,0,0,.13);z-index:150;
-  display:none;flex-direction:column;max-height:480px}
-.cppanel.show{display:flex}
-.cphead{padding:13px 16px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between}
-.cphead h3{font-size:14px;font-weight:600;color:#0F172A;display:flex;align-items:center;gap:8px}
-.cpclose{background:none;border:none;cursor:pointer;color:var(--gray);font-size:18px;padding:2px}
-.cpmsgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
-.mu{align-self:flex-end;background:var(--blue);color:#fff;padding:9px 13px;
-  border-radius:12px 12px 2px 12px;font-size:13px;max-width:82%;line-height:1.45}
-.ma{align-self:flex-start;background:#F8FAFC;color:#1E293B;padding:10px 13px;
-  border-radius:12px 12px 12px 2px;font-size:13px;max-width:92%;
-  border:1px solid var(--border);line-height:1.55}
-.mins{margin:4px 0;line-height:1.5}
-.cpinr{padding:11px 16px;border-top:1px solid var(--border);display:flex;gap:8px}
-.cpinput{flex:1;padding:8px 11px;border:1px solid var(--border);border-radius:8px;
-  font-size:13px;font-family:inherit;outline:none}
-.cpinput:focus{border-color:var(--blue)}
-.cpsend{padding:8px 13px;background:var(--blue);color:#fff;border:none;border-radius:8px;
-  cursor:pointer;font-size:13px;font-family:inherit;font-weight:500}
-.cpsend:hover{background:var(--blue-h)}
-
-/* TOAST */
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:#1E293B;color:#fff;padding:9px 18px;border-radius:8px;font-size:13px;
-  z-index:500;transition:transform .25s;pointer-events:none;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
+/* INLINE NEW FACT */
+.new-fact{padding:12px 16px;background:var(--blue-light);border-top:1px dashed var(--gray-200)}
+.new-fact textarea{width:100%;font-size:13px;font-family:inherit;border:1px solid var(--blue);border-radius:var(--radius-sm);padding:7px 8px;outline:none;resize:none;margin-bottom:7px;line-height:1.5;background:#fff}
+.new-fact-ctrl{display:flex;align-items:center;gap:7px}
 
 /* EMPTY STATE */
-.es{text-align:center;padding:48px 24px;color:#94A3B8}
-.es-ico{font-size:38px;margin-bottom:12px}
-.es h4{font-size:15px;font-weight:600;color:#475569;margin-bottom:6px}
+.empty{text-align:center;padding:48px 24px;color:var(--gray-500)}
+.empty-ico{font-size:36px;opacity:.35;margin-bottom:10px}
+.empty h3{font-size:15px;font-weight:600;color:var(--gray-900);margin-bottom:5px}
+.empty p{font-size:13px;line-height:1.5;max-width:300px;margin:0 auto 14px}
 
-.hidden{display:none!important}
+/* SKELETON */
+@keyframes shimmer{0%{background-position:-800px 0}100%{background-position:800px 0}}
+.skel{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:800px 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-lg)}
+
+/* COPILOT DEMO PANEL */
+.demo-panel{position:fixed;bottom:20px;right:20px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow);width:340px;z-index:200;overflow:visible}
+.demo-hdr{padding:11px 14px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.demo-body{padding:14px;font-size:13px}
+.demo-tip{font-size:12px;color:var(--gray-500);margin-bottom:12px}
+.insight{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;line-height:1.5}
+.insight-text{flex:1;color:var(--gray-900);font-size:13px}
+.cit-btn{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:var(--blue-light);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:9px;color:var(--blue);margin-top:2px;position:relative}
+.cit-btn:hover{background:#DBEAFE}
+.cit-tip{position:absolute;bottom:calc(100% + 8px);right:0;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:0 8px 24px rgba(0,0,0,.12);padding:14px;width:310px;z-index:300;display:none;text-align:left}
+.cit-tip.open{display:block}
+.cit-tip-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-400);margin-bottom:10px}
+.cit-fact{padding:9px 0;border-bottom:1px dashed var(--gray-200)}
+.cit-fact:last-child{border-bottom:none;padding-bottom:0}
+.cit-fact-text{font-size:12px;color:var(--gray-900);line-height:1.4;margin-bottom:6px;font-style:italic}
+.cit-meta-row{font-size:11px;color:var(--gray-500);display:flex;gap:4px;margin-bottom:2px}
+.cit-meta-row .lbl{color:var(--gray-400)}
+.lev-badge{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px}
+.lev-badge.global{background:var(--blue-light);color:#1D4ED8}
+.lev-badge.market{background:var(--green-light);color:#15803D}
+.lev-badge.brand{background:var(--amber-light);color:#C2410C}
+.lev-badge.brief{background:#F5F3FF;color:#6D28D9}
+.cit-link{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:var(--blue);cursor:pointer;margin-top:3px;font-weight:500}
+.cit-link:hover{text-decoration:underline}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--gray-900);color:#fff;padding:9px 18px;border-radius:var(--radius);font-size:13px;opacity:0;transition:transform .25s,opacity .25s;z-index:1000;pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
 </head>
 <body>
 
 <!-- TOP NAV -->
-<nav class="nav">
-  <div class="nav-logo">
-    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    Design Console
+<nav class="topnav">
+  <div class="logo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Planning Console
   </div>
   <div class="nav-sep"></div>
-  <div class="nav-sel">
-    <span>Client:</span>
-    <select onchange="onCtx()"><option>Coca-Cola</option><option>Nike</option><option>Unilever</option></select>
+  <div class="ctx-item">
+    <span class="ctx-label">Client:</span>
+    <span class="ctx-val">Coca-Cola</span>
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
-  <div class="nav-sel">
-    <span>Market:</span>
-    <select onchange="onCtx()"><option>United States</option><option>United Kingdom</option><option>Germany</option></select>
+  <div class="ctx-item">
+    <span class="ctx-label">Market:</span>
+    <span class="ctx-val">United States</span>
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
-  <div class="nav-sel">
-    <span>View as:</span>
-    <select id="rolesel" onchange="changeRole(this.value)">
-      <option value="ga">Global Admin</option>
-      <option value="ma">Market Admin (US)</option>
-      <option value="ca">Client Admin (Coca-Cola)</option>
-      <option value="pl">Media Planner</option>
-    </select>
+  <div class="ctx-item">
+    <span class="ctx-label">Project:</span>
+    <span class="ctx-val muted">Select Project</span>
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
-  <div class="nav-sp"></div>
-  <button class="nav-icon">🔔</button>
-  <button class="nav-icon">❓</button>
-  <button class="nav-icon">👤</button>
+  <div class="nav-right">
+    <button class="icon-btn">🔔</button>
+    <button class="icon-btn">?</button>
+    <div class="avatar">KL</div>
+  </div>
 </nav>
 
-<!-- LAYOUT -->
-<div class="layout">
+<div class="app-body">
+  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <button class="sb" title="Planning Agent" onclick="toast('Planning Agent (prototype)')">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    </button>
-    <button class="sb" title="Media Strategy" onclick="toast('Media Strategy (prototype)')">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-    </button>
-    <button class="sb on" title="Knowledge Bank">
-      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-    </button>
+    <div class="sb-item" title="Menu">☰</div>
+    <div class="sb-sep"></div>
+    <div class="sb-item" title="Planning Agent">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    </div>
+    <div class="sb-item" title="Media Strategy">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    </div>
+    <div class="sb-item active" title="Knowledge Bank">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
   </aside>
 
+  <!-- MAIN -->
   <main class="main">
-    <div class="ph1">Knowledge Bank</div>
-    <div class="ph2">Institutional knowledge that informs Copilot recommendations across all media plans.</div>
+    <div class="page-h1">Knowledge Bank</div>
+    <div class="page-sub">Manage facts and documents that inform Copilot recommendations across all media plans.</div>
 
+    <!-- TABS -->
     <div class="tabs">
-      <div class="tab on" id="tab-g" onclick="switchTab('g',this)">🌐 Global</div>
-      <div class="tab" id="tab-m" onclick="switchTab('m',this)">📍 Market</div>
-      <div class="tab" id="tab-c" onclick="switchTab('c',this)">🏢 Client</div>
-      <div class="tab" id="tab-b" onclick="switchTab('b',this)">✨ Brand</div>
+      <div class="tab active" onclick="switchTab('global',this)">Global <span class="tab-ct">24 facts</span></div>
+      <div class="tab" onclick="switchTab('market',this)">Market <span class="tab-ct">18 facts</span></div>
+      <div class="tab" onclick="switchTab('client',this)">Client <span class="tab-ct">31 facts</span></div>
+      <div class="tab" onclick="switchTab('brand',this)">Brand <span class="tab-ct">12 facts</span></div>
     </div>
 
     <!-- ===== GLOBAL ===== -->
-    <div id="pane-g">
-      <div id="pb-g" class="pb edit">✅ You have <strong>edit access</strong> to Global Knowledge Bank.</div>
+    <div class="tab-pane active" id="pane-global">
+      <div class="perm-banner edit">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        You have edit access to Global Knowledge Bank
+      </div>
 
       <div class="card">
-        <div class="card-h">
-          <div><div class="card-t">📁 File Management</div><div class="card-s">Upload documents to extract facts automatically</div></div>
+        <div class="card-head">
+          <div><div class="card-title">Documents</div><div class="card-sub">Upload documents to extract facts automatically</div></div>
+          <button class="btn-prim" onclick="simUpload('g')">+ Upload file</button>
         </div>
-        <div class="card-b">
-          <div class="uzone" id="uz-g"
-            ondragover="event.preventDefault();this.classList.add('drag')"
-            ondragleave="this.classList.remove('drag')"
-            ondrop="event.preventDefault();this.classList.remove('drag');simUpload('g')">
-            <div style="font-size:30px;margin-bottom:8px">📄</div>
-            <div style="font-size:14px;font-weight:500;color:#334155;margin-bottom:4px">Drag &amp; drop files here</div>
-            <div style="font-size:12px;color:#94A3B8">PDF · DOCX · PPTX · XLSX</div>
-            <button class="ubtn" onclick="simUpload('g')">Browse files</button>
+        <div class="card-body">
+          <div class="upload-zone" onclick="simUpload('g')">
+            <div class="upload-zone-icon">📄</div>
+            <div class="upload-zone-text"><b>Click to upload</b> or drag and drop</div>
+            <div class="upload-zone-fmt">PDF · DOCX · PPTX · XLSX</div>
           </div>
-          <div id="sk-g" class="hidden">
-            <div class="skel" style="height:68px;margin-bottom:8px"></div>
-            <div class="skel" style="height:52px;opacity:.65"></div>
-          </div>
-          <div class="flist" id="fl-g">
-            <div class="frow" id="fr-g1">
-              <div class="ficon">📄</div>
-              <div class="finfo"><div class="fname">Global-Media-Trends-2025.pdf</div><div class="fmeta">Uploaded 2 Mar 2026 · 2.4 MB</div></div>
-              <span class="ftag">Research</span><span class="ftag">EN</span>
-              <button class="fdel" onclick="removeFile('fr-g1')" title="Delete">🗑</button>
+          <div class="file-list" id="files-g">
+            <div class="file-item">
+              <div class="file-ico pdf">📕</div>
+              <div class="file-info"><div class="file-name">Global-Media-Trends-2025.pdf</div><div class="file-meta"><span class="file-cat">Research</span>EN · 2 Mar 2026</div></div>
+              <button class="file-del" onclick="removeFile(this)" title="Delete">🗑</button>
             </div>
-            <div class="frow" id="fr-g2">
-              <div class="ficon">📊</div>
-              <div class="finfo"><div class="fname">MediaPlanning-Fundamentals-2026.docx</div><div class="fmeta">Uploaded 15 Jan 2026 · 1.8 MB</div></div>
-              <span class="ftag">Strategy</span><span class="ftag">EN</span>
-              <button class="fdel" onclick="removeFile('fr-g2')" title="Delete">🗑</button>
+            <div class="file-item">
+              <div class="file-ico docx">📘</div>
+              <div class="file-info"><div class="file-name">MediaPlanning-Fundamentals-2026.docx</div><div class="file-meta"><span class="file-cat">Strategy</span>EN · 15 Jan 2026</div></div>
+              <button class="file-del" onclick="removeFile(this)" title="Delete">🗑</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="fhdr">
-        <h3>Facts</h3>
-        <span class="fcnt">24 active · <span class="hp">8 high-priority</span></span>
-        <input class="fsrch" type="text" placeholder="Search facts…" oninput="searchFacts(this.value,'tl-g')">
-        <button class="atbtn" id="atbtn-g" onclick="showNTF('g')">+ Add topic</button>
-      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Facts</div><div class="card-sub">AI-extracted and manually added knowledge grouped by topic</div></div></div>
+        <div class="card-body">
+          <div class="facts-hdr">
+            <div class="facts-stat"><b>24</b> active facts &nbsp;·&nbsp; <span class="hp">8 high-priority</span></div>
+            <div class="search-box">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search facts…" oninput="searchFacts(this.value,'pane-global')">
+            </div>
+            <button class="btn-add-topic" onclick="addTopicPrompt('global-topics')">+ Add topic</button>
+          </div>
+          <div class="topics" id="global-topics">
 
-      <div id="ntf-g" class="ntfm">
-        <input type="text" id="ntn-g" placeholder="Topic name…">
-        <div class="ntrow">
-          <button class="savebtn" onclick="saveNTF('g')">Save</button>
-          <button class="cancelbtn" onclick="hideNTF('g')">Cancel</button>
+            <!-- TOPIC: Digital Trends -->
+            <div class="topic-card open" id="t-g1">
+              <div class="topic-hdr" onclick="toggleTopic('t-g1')">
+                <div class="topic-ico">📺</div>
+                <div class="topic-info"><div class="topic-name">Digital &amp; CTV Trends</div><div class="topic-desc">Streaming, connected TV, digital growth patterns</div></div>
+                <div class="topic-ctrl"><div class="topic-dot" title="Contains high-priority facts"></div><div class="topic-badge">4/4</div><div class="topic-chevron">▼</div></div>
+              </div>
+              <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">CTV and digital channels continue to outperform traditional media globally. Programmatic buying now accounts for over 80% of digital display spend. Linear TV viewership is declining sharply in the 18–35 demographic.</div></div>
+              <div class="topic-facts">
+                <div class="fact-row" id="f-g1-1">
+                  <div class="fact-check">✓</div>
+                  <div class="fact-body">
+                    <div class="fact-text">CTV grew 34% year-over-year globally, becoming the #1 fastest-growing media channel in 2025.</div>
+                    <div class="fact-meta">
+                      <button class="pp high" onclick="openPP(event,'f-g1-1')">↑ High priority ▾<div class="pp-dd" id="dd-f-g1-1"><div class="pp-dd-item" onclick="setPP(event,'f-g1-1','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g1-1','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g1-1','low')"><span class="pp-dot low"></span>Low priority</div></div></button>
+                      <span class="src-tag">⚙ Global-Media-Trends-2025.pdf</span>
+                      <button class="btn-xs" onclick="editFact('f-g1-1')">Edit</button>
+                      <button class="btn-xs danger" onclick="delFact('f-g1-1')">Delete</button>
+                    </div>
+                    <div class="fact-edit-wrap" id="ew-f-g1-1"><textarea rows="2">CTV grew 34% year-over-year globally, becoming the #1 fastest-growing media channel in 2025.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-g1-1')">Save</button><button class="btn-xs" onclick="cancelEdit('f-g1-1')">Cancel</button></div></div>
+                  </div>
+                </div>
+                <div class="fact-row" id="f-g1-2">
+                  <div class="fact-check">✓</div>
+                  <div class="fact-body">
+                    <div class="fact-text">Programmatic advertising accounts for 82% of all digital display spend globally — up from 74% in 2023.</div>
+                    <div class="fact-meta">
+                      <button class="pp high" onclick="openPP(event,'f-g1-2')">↑ High priority ▾<div class="pp-dd" id="dd-f-g1-2"><div class="pp-dd-item" onclick="setPP(event,'f-g1-2','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g1-2','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g1-2','low')"><span class="pp-dot low"></span>Low priority</div></div></button>
+                      <span class="src-tag">⚙ Global-Media-Trends-2025.pdf</span>
+                      <button class="btn-xs" onclick="editFact('f-g1-2')">Edit</button>
+                      <button class="btn-xs danger" onclick="delFact('f-g1-2')">Delete</button>
+                    </div>
+                    <div class="fact-edit-wrap" id="ew-f-g1-2"><textarea rows="2">Programmatic advertising accounts for 82% of all digital display spend globally — up from 74% in 2023.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-g1-2')">Save</button><button class="btn-xs" onclick="cancelEdit('f-g1-2')">Cancel</button></div></div>
+                  </div>
+                </div>
+                <div class="fact-row" id="f-g1-3">
+                  <div class="fact-check">✓</div>
+                  <div class="fact-body">
+                    <div class="fact-text">Linear TV viewership declined 11% YoY among 18–35 demographic globally. Budget reallocation to streaming is critical.</div>
+                    <div class="fact-meta">
+                      <button class="pp high" onclick="openPP(event,'f-g1-3')">↑ High priority ▾<div class="pp-dd" id="dd-f-g1-3"><div class="pp-dd-item" onclick="setPP(event,'f-g1-3','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g1-3','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g1-3','low')"><span class="pp-dot low"></span>Low priority</div></div></button>
+                      <span class="src-tag manual">manual</span>
+                      <span class="hash-tag">#linear-tv</span>
+                      <button class="btn-xs" onclick="editFact('f-g1-3')">Edit</button>
+                      <button class="btn-xs danger" onclick="delFact('f-g1-3')">Delete</button>
+                    </div>
+                    <div class="fact-edit-wrap" id="ew-f-g1-3"><textarea rows="2">Linear TV viewership declined 11% YoY among 18–35 demographic globally. Budget reallocation to streaming is critical.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-g1-3')">Save</button><button class="btn-xs" onclick="cancelEdit('f-g1-3')">Cancel</button></div></div>
+                  </div>
+                </div>
+                <div class="fact-row" id="f-g1-4">
+                  <div class="fact-check">✓</div>
+                  <div class="fact-body">
+                    <div class="fact-text">Mobile-first consumption represents 68% of all video viewing globally across 18–54 age groups.</div>
+                    <div class="fact-meta">
+                      <button class="pp medium" onclick="openPP(event,'f-g1-4')">~ Medium priority ▾<div class="pp-dd" id="dd-f-g1-4"><div class="pp-dd-item" onclick="setPP(event,'f-g1-4','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g1-4','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g1-4','low')"><span class="pp-dot low"></span>Low priority</div></div></button>
+                      <span class="src-tag">⚙ Global-Media-Trends-2025.pdf</span>
+                      <span class="hash-tag">#mobile</span>
+                      <span class="hash-tag">#video</span>
+                      <button class="btn-xs" onclick="editFact('f-g1-4')">Edit</button>
+                      <button class="btn-xs danger" onclick="delFact('f-g1-4')">Delete</button>
+                    </div>
+                    <div class="fact-edit-wrap" id="ew-f-g1-4"><textarea rows="2">Mobile-first consumption represents 68% of all video viewing globally across 18–54 age groups.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-g1-4')">Save</button><button class="btn-xs" onclick="cancelEdit('f-g1-4')">Cancel</button></div></div>
+                  </div>
+                </div>
+                <button class="add-fact-btn" onclick="showAddFact('t-g1')">+ Add fact to this topic</button>
+              </div>
+            </div>
+
+            <!-- TOPIC: Audience Behavior -->
+            <div class="topic-card" id="t-g2">
+              <div class="topic-hdr" onclick="toggleTopic('t-g2')">
+                <div class="topic-ico">👥</div>
+                <div class="topic-info"><div class="topic-name">Audience Behavior</div><div class="topic-desc">Consumer habits, attention patterns, media consumption</div></div>
+                <div class="topic-ctrl"><div class="topic-dot"></div><div class="topic-badge">5/5</div><div class="topic-chevron">▼</div></div>
+              </div>
+              <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">Modern audiences show fragmented, multi-screen consumption patterns. Ad avoidance at all-time high at 42%. Second-screen behavior creates cross-device targeting opportunities.</div></div>
+              <div class="topic-facts">
+                <div class="fact-row" id="f-g2-1">
+                  <div class="fact-check">✓</div>
+                  <div class="fact-body">
+                    <div class="fact-text">73% of consumers use a second screen while watching TV — creating cross-device targeting opportunities.</div>
+                    <div class="fact-meta">
+                      <button class="pp high" onclick="openPP(event,'f-g2-1')">↑ High priority ▾<div class="pp-dd" id="dd-f-g2-1"><div class="pp-dd-item" onclick="setPP(event,'f-g2-1','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g2-1','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g2-1','low')"><span class="pp-dot low"></span>Low priority</div></div></button>
+                      <span class="src-tag">⚙ MediaPlanning-Fundamentals-2026.docx</span>
+                      <button class="btn-xs" onclick="editFact('f-g2-1')">Edit</button>
+                    </div>
+                    <div class="fact-edit-wrap" id="ew-f-g2-1"><textarea rows="2">73% of consumers use a second screen while watching TV — creating cross-device targeting opportunities.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-g2-1')">Save</button><button class="btn-xs" onclick="cancelEdit('f-g2-1')">Cancel</button></div></div>
+                  </div>
+                </div>
+                <div class="fact-row" id="f-g2-2">
+                  <div class="fact-check">✓</div>
+                  <div class="fact-body">
+                    <div class="fact-text">Ad-blocking usage grew to 42% globally in 2025, making non-interruptive and native formats essential.</div>
+                    <div class="fact-meta">
+                      <button class="pp medium" onclick="openPP(event,'f-g2-2')">~ Medium priority ▾<div class="pp-dd" id="dd-f-g2-2"><div class="pp-dd-item" onclick="setPP(event,'f-g2-2','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g2-2','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g2-2','low')"><span class="pp-dot low"></span>Low priority</div></div></button>
+                      <span class="src-tag">⚙ MediaPlanning-Fundamentals-2026.docx</span>
+                      <span class="hash-tag">#adblocker</span>
+                      <button class="btn-xs" onclick="editFact('f-g2-2')">Edit</button>
+                    </div>
+                    <div class="fact-edit-wrap" id="ew-f-g2-2"><textarea rows="2">Ad-blocking usage grew to 42% globally in 2025, making non-interruptive and native formats essential.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-g2-2')">Save</button><button class="btn-xs" onclick="cancelEdit('f-g2-2')">Cancel</button></div></div>
+                  </div>
+                </div>
+                <button class="add-fact-btn" onclick="showAddFact('t-g2')">+ Add fact to this topic</button>
+              </div>
+            </div>
+
+            <!-- TOPIC: Budget Benchmarks -->
+            <div class="topic-card" id="t-g3">
+              <div class="topic-hdr" onclick="toggleTopic('t-g3')">
+                <div class="topic-ico">💰</div>
+                <div class="topic-info"><div class="topic-name">Budget Benchmarks</div><div class="topic-desc">Global CPM standards, channel cost benchmarks</div></div>
+                <div class="topic-ctrl"><div class="topic-badge">8/8</div><div class="topic-chevron">▼</div></div>
+              </div>
+              <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">Global CPM benchmarks vary significantly by channel — CTV $28–45, social video $8, digital display $3.50. Seasonal Q4 premiums of 15–30% apply across most channels.</div></div>
+              <div class="topic-facts">
+                <div class="fact-row" id="f-g3-1">
+                  <div class="fact-check">✓</div>
+                  <div class="fact-body">
+                    <div class="fact-text">Global average CPM: CTV $32 · Social video $8 · Digital display $3.50 (2025 benchmarks).</div>
+                    <div class="fact-meta">
+                      <button class="pp medium" onclick="openPP(event,'f-g3-1')">~ Medium priority ▾<div class="pp-dd" id="dd-f-g3-1"><div class="pp-dd-item" onclick="setPP(event,'f-g3-1','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g3-1','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-g3-1','low')"><span class="pp-dot low"></span>Low priority</div></div></button>
+                      <span class="src-tag">⚙ Global-Media-Trends-2025.pdf</span>
+                      <span class="hash-tag">#cpm</span>
+                      <button class="btn-xs" onclick="editFact('f-g3-1')">Edit</button>
+                    </div>
+                    <div class="fact-edit-wrap" id="ew-f-g3-1"><textarea rows="2">Global average CPM: CTV $32 · Social video $8 · Digital display $3.50 (2025 benchmarks).</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-g3-1')">Save</button><button class="btn-xs" onclick="cancelEdit('f-g3-1')">Cancel</button></div></div>
+                  </div>
+                </div>
+                <button class="add-fact-btn" onclick="showAddFact('t-g3')">+ Add fact to this topic</button>
+              </div>
+            </div>
+
+          </div><!-- /topics -->
         </div>
       </div>
-
-      <div id="tl-g">
-        <!-- TOPIC: Digital & CTV Trends -->
-        <div class="tc open" id="t-g-1">
-          <div class="tch" onclick="toggleTC('t-g-1')">
-            <div class="tci" style="background:#EFF6FF">📺</div>
-            <div class="tcn"><div class="tcname">Digital &amp; CTV Trends</div><div class="tcdesc">Streaming, connected TV, digital growth patterns</div></div>
-            <div class="tcb"><span class="tcct">4/4</span><span class="tcdot" title="Has high-priority facts"></span><span class="tcarrow">▼</span></div>
-          </div>
-          <div class="tcsum">CTV and digital channels continue outperforming traditional media globally. Programmatic buying accounts for 82% of digital display. Linear TV viewership declining sharply in 18–35 demographic.</div>
-          <div class="tcbody">
-            <!-- fact g1 -->
-            <div class="fr" id="f-g1">
-              <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-              <div class="fbd">
-                <div class="ftxt" id="ft-g1">CTV grew 34% YoY globally, becoming the #1 fastest-growing media channel in 2025.</div>
-                <textarea class="fedit-area" id="fe-g1">CTV grew 34% YoY globally, becoming the #1 fastest-growing media channel in 2025.</textarea>
-                <div class="save-row hidden" id="fs-g1"><button class="savebtn" onclick="saveFact('g1')">Save</button><button class="cancelbtn" onclick="cancelEdit('g1')">Cancel</button></div>
-                <div class="fmeta2">
-                  <div class="ppwrap" id="ppw-g1"><button class="ppbtn pph" onclick="openPP(event,'g1')">🔴 High ▾</button><div class="ppmenu" id="ppm-g1"><div class="ppopt" onclick="setPP(event,'g1','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'g1','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'g1','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                  <span class="stag">⚙ Global-Media-Trends-2025.pdf</span>
-                  <span class="htag">#ctv</span><span class="htag">#trends</span>
-                  <button class="addtag" onclick="addTag(this)">+ tag</button>
-                </div>
-              </div>
-              <div class="fbtns"><button class="feditbtn" onclick="editFact('g1')">Edit</button><button class="fdelbtn" onclick="delFact('f-g1')">✕</button></div>
-            </div>
-            <!-- fact g2 -->
-            <div class="fr" id="f-g2">
-              <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-              <div class="fbd">
-                <div class="ftxt" id="ft-g2">Programmatic advertising accounts for 82% of all digital display spend globally — up from 74% in 2023.</div>
-                <textarea class="fedit-area" id="fe-g2">Programmatic advertising accounts for 82% of all digital display spend globally — up from 74% in 2023.</textarea>
-                <div class="save-row hidden" id="fs-g2"><button class="savebtn" onclick="saveFact('g2')">Save</button><button class="cancelbtn" onclick="cancelEdit('g2')">Cancel</button></div>
-                <div class="fmeta2">
-                  <div class="ppwrap" id="ppw-g2"><button class="ppbtn pph" onclick="openPP(event,'g2')">🔴 High ▾</button><div class="ppmenu" id="ppm-g2"><div class="ppopt" onclick="setPP(event,'g2','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'g2','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'g2','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                  <span class="stag">⚙ Global-Media-Trends-2025.pdf</span>
-                  <span class="htag">#programmatic</span>
-                  <button class="addtag" onclick="addTag(this)">+ tag</button>
-                </div>
-              </div>
-              <div class="fbtns"><button class="feditbtn" onclick="editFact('g2')">Edit</button><button class="fdelbtn" onclick="delFact('f-g2')">✕</button></div>
-            </div>
-            <!-- fact g3 -->
-            <div class="fr" id="f-g3">
-              <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-              <div class="fbd">
-                <div class="ftxt" id="ft-g3">Linear TV viewership declined 11% YoY among 18–35 globally. Budget reallocation to streaming is critical.</div>
-                <textarea class="fedit-area" id="fe-g3">Linear TV viewership declined 11% YoY among 18–35 globally. Budget reallocation to streaming is critical.</textarea>
-                <div class="save-row hidden" id="fs-g3"><button class="savebtn" onclick="saveFact('g3')">Save</button><button class="cancelbtn" onclick="cancelEdit('g3')">Cancel</button></div>
-                <div class="fmeta2">
-                  <div class="ppwrap" id="ppw-g3"><button class="ppbtn pph" onclick="openPP(event,'g3')">🔴 High ▾</button><div class="ppmenu" id="ppm-g3"><div class="ppopt" onclick="setPP(event,'g3','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'g3','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'g3','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                  <span class="stag">manual</span>
-                  <span class="htag">#linear-tv</span>
-                  <button class="addtag" onclick="addTag(this)">+ tag</button>
-                </div>
-              </div>
-              <div class="fbtns"><button class="feditbtn" onclick="editFact('g3')">Edit</button><button class="fdelbtn" onclick="delFact('f-g3')">✕</button></div>
-            </div>
-            <!-- fact g4 -->
-            <div class="fr" id="f-g4">
-              <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-              <div class="fbd">
-                <div class="ftxt" id="ft-g4">Mobile-first consumption: 68% of all video viewing globally across 18–54 age groups.</div>
-                <textarea class="fedit-area" id="fe-g4">Mobile-first consumption: 68% of all video viewing globally across 18–54 age groups.</textarea>
-                <div class="save-row hidden" id="fs-g4"><button class="savebtn" onclick="saveFact('g4')">Save</button><button class="cancelbtn" onclick="cancelEdit('g4')">Cancel</button></div>
-                <div class="fmeta2">
-                  <div class="ppwrap" id="ppw-g4"><button class="ppbtn ppm" onclick="openPP(event,'g4')">🟡 Medium ▾</button><div class="ppmenu" id="ppm-g4"><div class="ppopt" onclick="setPP(event,'g4','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'g4','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'g4','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                  <span class="stag">⚙ Global-Media-Trends-2025.pdf</span>
-                  <span class="htag">#mobile</span><span class="htag">#video</span>
-                  <button class="addtag" onclick="addTag(this)">+ tag</button>
-                </div>
-              </div>
-              <div class="fbtns"><button class="feditbtn" onclick="editFact('g4')">Edit</button><button class="fdelbtn" onclick="delFact('f-g4')">✕</button></div>
-            </div>
-            <div class="nffm" id="nff-t-g-1"><textarea id="nft-t-g-1" placeholder="Enter fact text…"></textarea><div class="nfrow"><select id="nfp-t-g-1"><option value="h">High priority</option><option value="m" selected>Medium priority</option><option value="l">Low priority</option></select><button class="savebtn" onclick="saveNFF('t-g-1','g')">Add fact</button><button class="cancelbtn" onclick="hideNFF('t-g-1')">Cancel</button></div></div>
-            <button class="afbtn" id="afb-t-g-1" onclick="showNFF('t-g-1')">+ Add fact to this topic</button>
-          </div>
-        </div>
-
-        <!-- TOPIC: Audience Behavior -->
-        <div class="tc" id="t-g-2">
-          <div class="tch" onclick="toggleTC('t-g-2')">
-            <div class="tci" style="background:#F0FDF4">👥</div>
-            <div class="tcn"><div class="tcname">Audience Behavior</div><div class="tcdesc">Consumer habits, attention patterns, media consumption</div></div>
-            <div class="tcb"><span class="tcct">3/3</span><span class="tcarrow">▼</span></div>
-          </div>
-          <div class="tcsum">Audiences show fragmented, multi-screen consumption. Ad avoidance at all-time high — 42%. Second-screen behaviour creates cross-device targeting opportunities.</div>
-          <div class="tcbody">
-            <div class="fr" id="f-g5">
-              <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-              <div class="fbd">
-                <div class="ftxt" id="ft-g5">73% of consumers use a second screen while watching TV — creating cross-device targeting opportunities.</div>
-                <textarea class="fedit-area" id="fe-g5">73% of consumers use a second screen while watching TV — creating cross-device targeting opportunities.</textarea>
-                <div class="save-row hidden" id="fs-g5"><button class="savebtn" onclick="saveFact('g5')">Save</button><button class="cancelbtn" onclick="cancelEdit('g5')">Cancel</button></div>
-                <div class="fmeta2">
-                  <div class="ppwrap" id="ppw-g5"><button class="ppbtn pph" onclick="openPP(event,'g5')">🔴 High ▾</button><div class="ppmenu" id="ppm-g5"><div class="ppopt" onclick="setPP(event,'g5','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'g5','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'g5','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                  <span class="stag">⚙ MediaPlanning-Fundamentals-2026.docx</span>
-                  <button class="addtag" onclick="addTag(this)">+ tag</button>
-                </div>
-              </div>
-              <div class="fbtns"><button class="feditbtn" onclick="editFact('g5')">Edit</button><button class="fdelbtn" onclick="delFact('f-g5')">✕</button></div>
-            </div>
-            <div class="fr" id="f-g6">
-              <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-              <div class="fbd">
-                <div class="ftxt" id="ft-g6">Ad-blocking usage reached 42% globally in 2025 — native and non-interruptive formats now essential.</div>
-                <textarea class="fedit-area" id="fe-g6">Ad-blocking usage reached 42% globally in 2025 — native and non-interruptive formats now essential.</textarea>
-                <div class="save-row hidden" id="fs-g6"><button class="savebtn" onclick="saveFact('g6')">Save</button><button class="cancelbtn" onclick="cancelEdit('g6')">Cancel</button></div>
-                <div class="fmeta2">
-                  <div class="ppwrap" id="ppw-g6"><button class="ppbtn ppm" onclick="openPP(event,'g6')">🟡 Medium ▾</button><div class="ppmenu" id="ppm-g6"><div class="ppopt" onclick="setPP(event,'g6','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'g6','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'g6','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                  <span class="stag">⚙ MediaPlanning-Fundamentals-2026.docx</span>
-                  <span class="htag">#adblocker</span>
-                  <button class="addtag" onclick="addTag(this)">+ tag</button>
-                </div>
-              </div>
-              <div class="fbtns"><button class="feditbtn" onclick="editFact('g6')">Edit</button><button class="fdelbtn" onclick="delFact('f-g6')">✕</button></div>
-            </div>
-            <div class="nffm" id="nff-t-g-2"><textarea id="nft-t-g-2" placeholder="Enter fact text…"></textarea><div class="nfrow"><select id="nfp-t-g-2"><option value="h">High priority</option><option value="m" selected>Medium priority</option><option value="l">Low priority</option></select><button class="savebtn" onclick="saveNFF('t-g-2','g')">Add fact</button><button class="cancelbtn" onclick="hideNFF('t-g-2')">Cancel</button></div></div>
-            <button class="afbtn" id="afb-t-g-2" onclick="showNFF('t-g-2')">+ Add fact to this topic</button>
-          </div>
-        </div>
-
-        <!-- TOPIC: Budget Benchmarks -->
-        <div class="tc" id="t-g-3">
-          <div class="tch" onclick="toggleTC('t-g-3')">
-            <div class="tci" style="background:#FFFBEB">💰</div>
-            <div class="tcn"><div class="tcname">Budget Benchmarks</div><div class="tcdesc">Global CPM standards, channel cost benchmarks</div></div>
-            <div class="tcb"><span class="tcct">3/3</span><span class="tcarrow">▼</span></div>
-          </div>
-          <div class="tcsum">Global CPM benchmarks: CTV $32, social video $8, digital display $3.50. Q4 seasonal premiums 15–30% across most channels.</div>
-          <div class="tcbody">
-            <div class="fr" id="f-g7">
-              <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-              <div class="fbd">
-                <div class="ftxt" id="ft-g7">Global CPM benchmarks (2025): CTV $32 · Social video $8 · Digital display $3.50.</div>
-                <textarea class="fedit-area" id="fe-g7">Global CPM benchmarks (2025): CTV $32 · Social video $8 · Digital display $3.50.</textarea>
-                <div class="save-row hidden" id="fs-g7"><button class="savebtn" onclick="saveFact('g7')">Save</button><button class="cancelbtn" onclick="cancelEdit('g7')">Cancel</button></div>
-                <div class="fmeta2">
-                  <div class="ppwrap" id="ppw-g7"><button class="ppbtn ppm" onclick="openPP(event,'g7')">🟡 Medium ▾</button><div class="ppmenu" id="ppm-g7"><div class="ppopt" onclick="setPP(event,'g7','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'g7','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'g7','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                  <span class="stag">⚙ Global-Media-Trends-2025.pdf</span>
-                  <span class="htag">#cpm</span>
-                  <button class="addtag" onclick="addTag(this)">+ tag</button>
-                </div>
-              </div>
-              <div class="fbtns"><button class="feditbtn" onclick="editFact('g7')">Edit</button><button class="fdelbtn" onclick="delFact('f-g7')">✕</button></div>
-            </div>
-            <div class="nffm" id="nff-t-g-3"><textarea id="nft-t-g-3" placeholder="Enter fact text…"></textarea><div class="nfrow"><select id="nfp-t-g-3"><option value="h">High priority</option><option value="m" selected>Medium priority</option><option value="l">Low priority</option></select><button class="savebtn" onclick="saveNFF('t-g-3','g')">Add fact</button><button class="cancelbtn" onclick="hideNFF('t-g-3')">Cancel</button></div></div>
-            <button class="afbtn" id="afb-t-g-3" onclick="showNFF('t-g-3')">+ Add fact to this topic</button>
-          </div>
-        </div>
-      </div><!-- /tl-g -->
-    </div><!-- /pane-g -->
+    </div><!-- /pane-global -->
 
     <!-- ===== MARKET ===== -->
-    <div id="pane-m" class="hidden">
-      <div id="pb-m" class="pb ro">🔒 <strong>Read-only access.</strong> Contact a Market Admin to make changes.</div>
-      <div class="sr">
+    <div class="tab-pane" id="pane-market">
+      <div class="selector-row">
         <label>Market:</label>
-        <select onchange="loadMarket(this.value)">
+        <select class="sel" onchange="updateMarketContent(this.value)">
           <option value="">— Select market —</option>
-          <option value="us">United States</option>
+          <option value="us" selected>United States</option>
           <option value="uk">United Kingdom</option>
           <option value="de">Germany</option>
         </select>
       </div>
-      <div id="mc" class="hidden">
+      <div id="market-content">
+        <div class="perm-banner edit">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          You have edit access to United States Knowledge Bank
+        </div>
         <div class="card">
-          <div class="card-h"><div><div class="card-t">📁 File Management</div><div class="card-s">Market-specific documents</div></div></div>
-          <div class="card-b">
-            <div class="uzone" onclick="simUpload('m')">
-              <div style="font-size:28px;margin-bottom:6px">📄</div>
-              <div style="font-size:13px;font-weight:500;color:#334155;margin-bottom:3px">Drag &amp; drop files here</div>
-              <div style="font-size:12px;color:#94A3B8">PDF · DOCX · PPTX · XLSX</div>
-              <button class="ubtn" type="button">Browse files</button>
-            </div>
-            <div class="flist" id="fl-m">
-              <div class="frow" id="fr-m1">
-                <div class="ficon">📄</div>
-                <div class="finfo"><div class="fname" id="mfname">US-Market-Intelligence-Q4-2025.pdf</div><div class="fmeta">Uploaded 12 Jan 2026 · 3.2 MB</div></div>
-                <span class="ftag" id="mftag">United States</span><span class="ftag">EN</span>
-                <button class="fdel" onclick="removeFile('fr-m1')">🗑</button>
-              </div>
+          <div class="card-head"><div><div class="card-title">Documents — United States</div></div><button class="btn-prim">+ Upload file</button></div>
+          <div class="card-body">
+            <div class="upload-zone"><div class="upload-zone-icon">📄</div><div class="upload-zone-text"><b>Click to upload</b> or drag and drop</div><div class="upload-zone-fmt">PDF · DOCX · PPTX · XLSX</div></div>
+            <div class="file-list">
+              <div class="file-item"><div class="file-ico pdf">📕</div><div class="file-info"><div class="file-name">US-Market-Intelligence-Q4-2025.pdf</div><div class="file-meta"><span class="file-cat">Research</span>EN · 12 Jan 2026</div></div><button class="file-del" onclick="removeFile(this)">🗑</button></div>
             </div>
           </div>
         </div>
-        <div class="fhdr">
-          <h3>Facts</h3>
-          <span class="fcnt">18 active · <span class="hp">5 high-priority</span></span>
-          <input class="fsrch" type="text" placeholder="Search facts…" oninput="searchFacts(this.value,'tl-m')">
-          <button class="atbtn" id="atbtn-m" onclick="showNTF('m')">+ Add topic</button>
-        </div>
-        <div id="ntf-m" class="ntfm"><input type="text" id="ntn-m" placeholder="Topic name…"><div class="ntrow"><button class="savebtn" onclick="saveNTF('m')">Save</button><button class="cancelbtn" onclick="hideNTF('m')">Cancel</button></div></div>
-        <div id="tl-m">
-          <div class="tc" id="t-m-1">
-            <div class="tch" onclick="toggleTC('t-m-1')">
-              <div class="tci" style="background:#F0F9FF">📈</div>
-              <div class="tcn"><div class="tcname" id="mtopic1">US Digital Landscape</div><div class="tcdesc">Digital ad market, platform dominance, retail media</div></div>
-              <div class="tcb"><span class="tcct">5/5</span><span class="tcdot"></span><span class="tcarrow">▼</span></div>
-            </div>
-            <div class="tcsum" id="msum1">US digital ad market reached $278B in 2025 (+12% YoY). Retail media (Amazon, Walmart) grew 38% — now 14% of total digital spend.</div>
-            <div class="tcbody">
-              <div class="fr" id="f-m1">
-                <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-                <div class="fbd">
-                  <div class="ftxt" id="ft-m1">US digital advertising market reached $278 billion in 2025, a 12% YoY increase.</div>
-                  <textarea class="fedit-area" id="fe-m1">US digital advertising market reached $278 billion in 2025, a 12% YoY increase.</textarea>
-                  <div class="save-row hidden" id="fs-m1"><button class="savebtn" onclick="saveFact('m1')">Save</button><button class="cancelbtn" onclick="cancelEdit('m1')">Cancel</button></div>
-                  <div class="fmeta2">
-                    <div class="ppwrap" id="ppw-m1"><button class="ppbtn pph" onclick="openPP(event,'m1')">🔴 High ▾</button><div class="ppmenu" id="ppm-m1"><div class="ppopt" onclick="setPP(event,'m1','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'m1','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'m1','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                    <span class="stag">⚙ <span id="msrc1">US-Market-Intelligence-Q4-2025.pdf</span></span>
-                    <span class="htag">#digital</span>
-                    <button class="addtag" onclick="addTag(this)">+ tag</button>
-                  </div>
-                </div>
-                <div class="fbtns"><button class="feditbtn" onclick="editFact('m1')">Edit</button><button class="fdelbtn" onclick="delFact('f-m1')">✕</button></div>
-              </div>
-              <div class="nffm" id="nff-t-m-1"><textarea id="nft-t-m-1" placeholder="Enter fact text…"></textarea><div class="nfrow"><select id="nfp-t-m-1"><option value="h">High priority</option><option value="m" selected>Medium priority</option><option value="l">Low priority</option></select><button class="savebtn" onclick="saveNFF('t-m-1','m')">Add fact</button><button class="cancelbtn" onclick="hideNFF('t-m-1')">Cancel</button></div></div>
-              <button class="afbtn" id="afb-t-m-1" onclick="showNFF('t-m-1')">+ Add fact to this topic</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="me" class="es"><div class="es-ico">📍</div><h4>Select a market</h4><p style="font-size:13px">Choose a market above to view its Knowledge Bank.</p></div>
-    </div><!-- /pane-m -->
-
-    <!-- ===== CLIENT ===== -->
-    <div id="pane-c" class="hidden">
-      <div id="pb-c" class="pb ro">🔒 <strong>Read-only access.</strong> Contact a Client Admin to make changes.</div>
-      <div class="sr">
-        <label>Client:</label>
-        <select onchange="loadClient(this.value)">
-          <option value="">— Select client —</option>
-          <option value="cc">Coca-Cola</option>
-          <option value="nk">Nike</option>
-          <option value="ul">Unilever</option>
-        </select>
-      </div>
-      <div id="cc-content" class="hidden">
         <div class="card">
-          <div class="card-h"><div><div class="card-t">📁 File Management</div><div class="card-s">Client-specific documents</div></div></div>
-          <div class="card-b">
-            <div class="uzone" onclick="simUpload('c')">
-              <div style="font-size:28px;margin-bottom:6px">📄</div>
-              <div style="font-size:13px;font-weight:500;color:#334155;margin-bottom:3px">Drag &amp; drop files here</div>
-              <div style="font-size:12px;color:#94A3B8">PDF · DOCX · PPTX · XLSX</div>
-              <button class="ubtn" type="button">Browse files</button>
+          <div class="card-head"><div><div class="card-title">Facts — United States</div></div></div>
+          <div class="card-body">
+            <div class="facts-hdr">
+              <div class="facts-stat"><b>18</b> active facts &nbsp;·&nbsp; <span class="hp">5 high-priority</span></div>
+              <div class="search-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Search facts…"></div>
+              <button class="btn-add-topic">+ Add topic</button>
             </div>
-            <div class="flist" id="fl-c">
-              <div class="frow" id="fr-c1">
-                <div class="ficon">📄</div>
-                <div class="finfo"><div class="fname" id="cfname">Coca-Cola-FY26-MediaStrategy.pdf</div><div class="fmeta">Uploaded 3 Feb 2026 · 1.8 MB</div></div>
-                <span class="ftag" id="cftag">Coca-Cola</span><span class="ftag">Strategy</span>
-                <button class="fdel" onclick="removeFile('fr-c1')">🗑</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="fhdr">
-          <h3>Facts</h3>
-          <span class="fcnt">31 active · <span class="hp">9 high-priority</span></span>
-          <input class="fsrch" type="text" placeholder="Search facts…" oninput="searchFacts(this.value,'tl-c')">
-          <button class="atbtn" id="atbtn-c" onclick="showNTF('c')">+ Add topic</button>
-        </div>
-        <div id="ntf-c" class="ntfm"><input type="text" id="ntn-c" placeholder="Topic name…"><div class="ntrow"><button class="savebtn" onclick="saveNTF('c')">Save</button><button class="cancelbtn" onclick="hideNTF('c')">Cancel</button></div></div>
-        <div id="tl-c">
-          <div class="tc open" id="t-c-1">
-            <div class="tch" onclick="toggleTC('t-c-1')">
-              <div class="tci" style="background:#FFF7ED">🎯</div>
-              <div class="tcn"><div class="tcname">Brand Positioning</div><div class="tcdesc">Promise, pillars, differentiation</div></div>
-              <div class="tcb"><span class="tcct">3/3</span><span class="tcdot"></span><span class="tcarrow">▼</span></div>
-            </div>
-            <div class="tcsum">Coca-Cola positions as universal symbol of happiness and refreshment. FY26 theme "Real Magic" emphasises authentic human connection. Premium OTT and sports sponsorships are preferred environments.</div>
-            <div class="tcbody">
-              <div class="fr" id="f-c1">
-                <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-                <div class="fbd">
-                  <div class="ftxt" id="ft-c1">Coca-Cola brand value: #6 globally at $57.5B (Interbrand 2025). Key differentiator: emotional nostalgia + universal appeal.</div>
-                  <textarea class="fedit-area" id="fe-c1">Coca-Cola brand value: #6 globally at $57.5B (Interbrand 2025). Key differentiator: emotional nostalgia + universal appeal.</textarea>
-                  <div class="save-row hidden" id="fs-c1"><button class="savebtn" onclick="saveFact('c1')">Save</button><button class="cancelbtn" onclick="cancelEdit('c1')">Cancel</button></div>
-                  <div class="fmeta2">
-                    <div class="ppwrap" id="ppw-c1"><button class="ppbtn pph" onclick="openPP(event,'c1')">🔴 High ▾</button><div class="ppmenu" id="ppm-c1"><div class="ppopt" onclick="setPP(event,'c1','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'c1','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'c1','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                    <span class="stag" id="csrc1">⚙ Coca-Cola-FY26-MediaStrategy.pdf</span>
-                    <span class="htag">#brand</span><span class="htag">#positioning</span>
-                    <button class="addtag" onclick="addTag(this)">+ tag</button>
-                  </div>
+            <div class="topics">
+              <div class="topic-card" id="t-m1">
+                <div class="topic-hdr" onclick="toggleTopic('t-m1')"><div class="topic-ico">📈</div><div class="topic-info"><div class="topic-name">US Digital Landscape</div><div class="topic-desc">Digital ad market, platform dominance, retail media</div></div><div class="topic-ctrl"><div class="topic-dot"></div><div class="topic-badge">5/5</div><div class="topic-chevron">▼</div></div></div>
+                <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">US digital ad market reached $278B in 2025. Retail media networks are fastest-growing at +38% YoY. Google and Meta hold 52% combined share.</div></div>
+                <div class="topic-facts">
+                  <div class="fact-row"><div class="fact-check">✓</div><div class="fact-body"><div class="fact-text">US digital advertising market reached $278 billion in 2025, a 12% YoY increase.</div><div class="fact-meta"><button class="pp high">↑ High priority ▾</button><span class="src-tag">⚙ US-Market-Intelligence-Q4-2025.pdf</span><button class="btn-xs">Edit</button></div></div></div>
+                  <div class="fact-row"><div class="fact-check">✓</div><div class="fact-body"><div class="fact-text">Retail media networks (Amazon, Walmart Connect) grew 38% YoY — now 14% of total US digital spend.</div><div class="fact-meta"><button class="pp high">↑ High priority ▾</button><span class="src-tag">⚙ US-Market-Intelligence-Q4-2025.pdf</span><span class="hash-tag">#retail-media</span><button class="btn-xs">Edit</button></div></div></div>
+                  <button class="add-fact-btn">+ Add fact to this topic</button>
                 </div>
-                <div class="fbtns"><button class="feditbtn" onclick="editFact('c1')">Edit</button><button class="fdelbtn" onclick="delFact('f-c1')">✕</button></div>
               </div>
-              <div class="fr" id="f-c2">
-                <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-                <div class="fbd">
-                  <div class="ftxt" id="ft-c2">FY26 campaign theme: "Real Magic" — authentic human connections over product features.</div>
-                  <textarea class="fedit-area" id="fe-c2">FY26 campaign theme: "Real Magic" — authentic human connections over product features.</textarea>
-                  <div class="save-row hidden" id="fs-c2"><button class="savebtn" onclick="saveFact('c2')">Save</button><button class="cancelbtn" onclick="cancelEdit('c2')">Cancel</button></div>
-                  <div class="fmeta2">
-                    <div class="ppwrap" id="ppw-c2"><button class="ppbtn pph" onclick="openPP(event,'c2')">🔴 High ▾</button><div class="ppmenu" id="ppm-c2"><div class="ppopt" onclick="setPP(event,'c2','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'c2','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'c2','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                    <span class="stag" id="csrc2">⚙ Coca-Cola-FY26-MediaStrategy.pdf</span>
-                    <span class="htag">#campaign</span>
-                    <button class="addtag" onclick="addTag(this)">+ tag</button>
-                  </div>
+              <div class="topic-card" id="t-m2">
+                <div class="topic-hdr" onclick="toggleTopic('t-m2')"><div class="topic-ico">📱</div><div class="topic-info"><div class="topic-name">US Consumer Behavior</div><div class="topic-desc">Shopping habits, media consumption patterns</div></div><div class="topic-ctrl"><div class="topic-badge">8/8</div><div class="topic-chevron">▼</div></div></div>
+                <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">US adults spend 7.8 hours/day on digital media. TikTok Shop reached 45M monthly buyers. Privacy-first targeting is reshaping audience strategies.</div></div>
+                <div class="topic-facts">
+                  <div class="fact-row"><div class="fact-check">✓</div><div class="fact-body"><div class="fact-text">Average US adult spends 7.8 hours/day consuming digital media across devices (2025).</div><div class="fact-meta"><button class="pp medium">~ Medium priority ▾</button><span class="src-tag">⚙ US-Market-Intelligence-Q4-2025.pdf</span><button class="btn-xs">Edit</button></div></div></div>
+                  <button class="add-fact-btn">+ Add fact to this topic</button>
                 </div>
-                <div class="fbtns"><button class="feditbtn" onclick="editFact('c2')">Edit</button><button class="fdelbtn" onclick="delFact('f-c2')">✕</button></div>
-              </div>
-              <div class="nffm" id="nff-t-c-1"><textarea id="nft-t-c-1" placeholder="Enter fact text…"></textarea><div class="nfrow"><select id="nfp-t-c-1"><option value="h">High priority</option><option value="m" selected>Medium priority</option><option value="l">Low priority</option></select><button class="savebtn" onclick="saveNFF('t-c-1','c')">Add fact</button><button class="cancelbtn" onclick="hideNFF('t-c-1')">Cancel</button></div></div>
-              <button class="afbtn" id="afb-t-c-1" onclick="showNFF('t-c-1')">+ Add fact to this topic</button>
-            </div>
-          </div>
-          <div class="tc" id="t-c-2">
-            <div class="tch" onclick="toggleTC('t-c-2')">
-              <div class="tci" style="background:#F0FDF4">👤</div>
-              <div class="tcn"><div class="tcname">Target Audience</div><div class="tcdesc">Key segments, personas, demographics</div></div>
-              <div class="tcb"><span class="tcct">4/4</span><span class="tcdot"></span><span class="tcarrow">▼</span></div>
-            </div>
-            <div class="tcsum">Primary: Gen Z &amp; Millennials 18–35, urban, social-native. High index on TikTok (+140) and Instagram (+122). Secondary: family units during holidays.</div>
-            <div class="tcbody">
-              <div class="fr" id="f-c3">
-                <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-                <div class="fbd">
-                  <div class="ftxt" id="ft-c3">Primary target: 18–35, urban, high social usage. Indexes strongly on TikTok (+140) and Instagram (+122).</div>
-                  <textarea class="fedit-area" id="fe-c3">Primary target: 18–35, urban, high social usage. Indexes strongly on TikTok (+140) and Instagram (+122).</textarea>
-                  <div class="save-row hidden" id="fs-c3"><button class="savebtn" onclick="saveFact('c3')">Save</button><button class="cancelbtn" onclick="cancelEdit('c3')">Cancel</button></div>
-                  <div class="fmeta2">
-                    <div class="ppwrap" id="ppw-c3"><button class="ppbtn pph" onclick="openPP(event,'c3')">🔴 High ▾</button><div class="ppmenu" id="ppm-c3"><div class="ppopt" onclick="setPP(event,'c3','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'c3','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'c3','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                    <span class="stag">⚙ Coca-Cola-FY26-MediaStrategy.pdf</span>
-                    <span class="htag">#audience</span>
-                    <button class="addtag" onclick="addTag(this)">+ tag</button>
-                  </div>
-                </div>
-                <div class="fbtns"><button class="feditbtn" onclick="editFact('c3')">Edit</button><button class="fdelbtn" onclick="delFact('f-c3')">✕</button></div>
-              </div>
-              <div class="nffm" id="nff-t-c-2"><textarea id="nft-t-c-2" placeholder="Enter fact text…"></textarea><div class="nfrow"><select id="nfp-t-c-2"><option value="h">High priority</option><option value="m" selected>Medium priority</option><option value="l">Low priority</option></select><button class="savebtn" onclick="saveNFF('t-c-2','c')">Add fact</button><button class="cancelbtn" onclick="hideNFF('t-c-2')">Cancel</button></div></div>
-              <button class="afbtn" id="afb-t-c-2" onclick="showNFF('t-c-2')">+ Add fact to this topic</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="ce" class="es"><div class="es-ico">🏢</div><h4>Select a client</h4><p style="font-size:13px">Choose a client above to view their Knowledge Bank.</p></div>
-    </div><!-- /pane-c -->
-
-    <!-- ===== BRAND ===== -->
-    <div id="pane-b" class="hidden">
-      <div id="pb-b" class="pb ro">🔒 <strong>Read-only access.</strong> Contact a Client Admin to make changes.</div>
-      <div class="sr">
-        <label>Client:</label>
-        <select id="bcsel" onchange="loadBrandClient(this.value)">
-          <option value="">— Select client —</option>
-          <option value="cc">Coca-Cola</option>
-          <option value="nk">Nike</option>
-        </select>
-        <label id="blbl" class="hidden">Brand:</label>
-        <select id="brsel" class="hidden" onchange="loadBrand(this.value)">
-          <option value="">— Select brand —</option>
-        </select>
-      </div>
-      <div id="bc" class="hidden">
-        <div class="card">
-          <div class="card-h"><div><div class="card-t">📁 File Management</div><div class="card-s">Brand-specific documents</div></div></div>
-          <div class="card-b">
-            <div class="uzone" onclick="simUpload('b')">
-              <div style="font-size:28px;margin-bottom:6px">📄</div>
-              <div style="font-size:13px;font-weight:500;color:#334155;margin-bottom:3px">Drag &amp; drop files here</div>
-              <div style="font-size:12px;color:#94A3B8">PDF · DOCX · PPTX · XLSX</div>
-              <button class="ubtn" type="button">Browse files</button>
-            </div>
-            <div class="flist" id="fl-b">
-              <div class="frow" id="fr-b1">
-                <div class="ficon">📄</div>
-                <div class="finfo"><div class="fname" id="bfname">Coca-Cola-Zero-BrandBrief.pdf</div><div class="fmeta">Uploaded 1 Mar 2026 · 2.1 MB</div></div>
-                <span class="ftag" id="bftag">Coke Zero</span>
-                <button class="fdel" onclick="removeFile('fr-b1')">🗑</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="fhdr">
-          <h3>Facts</h3>
-          <span class="fcnt">12 active · <span class="hp">4 high-priority</span></span>
-          <input class="fsrch" type="text" placeholder="Search facts…" oninput="searchFacts(this.value,'tl-b')">
-          <button class="atbtn" id="atbtn-b" onclick="showNTF('b')">+ Add topic</button>
-        </div>
-        <div id="ntf-b" class="ntfm"><input type="text" id="ntn-b" placeholder="Topic name…"><div class="ntrow"><button class="savebtn" onclick="saveNTF('b')">Save</button><button class="cancelbtn" onclick="hideNTF('b')">Cancel</button></div></div>
-        <div id="tl-b">
-          <div class="tc open" id="t-b-1">
-            <div class="tch" onclick="toggleTC('t-b-1')">
-              <div class="tci" style="background:#F5F3FF">🥤</div>
-              <div class="tcn"><div class="tcname" id="btopic1">Brand Essence</div><div class="tcdesc">Positioning, taste parity, target audience</div></div>
-              <div class="tcb"><span class="tcct">3/3</span><span class="tcdot"></span><span class="tcarrow">▼</span></div>
-            </div>
-            <div class="tcsum" id="bsum1">Coke Zero positions around taste parity with Classic while targeting health-conscious consumers. Core: "Real Taste. Zero Sugar." Appeals primarily to 25–40 males with sports/gaming overlap.</div>
-            <div class="tcbody">
-              <div class="fr" id="f-b1">
-                <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-                <div class="fbd">
-                  <div class="ftxt" id="ft-b1">Coke Zero grew 8% volume YoY in 2025, outperforming category average. Strongest in US and Western Europe.</div>
-                  <textarea class="fedit-area" id="fe-b1">Coke Zero grew 8% volume YoY in 2025, outperforming category average. Strongest in US and Western Europe.</textarea>
-                  <div class="save-row hidden" id="fs-b1"><button class="savebtn" onclick="saveFact('b1')">Save</button><button class="cancelbtn" onclick="cancelEdit('b1')">Cancel</button></div>
-                  <div class="fmeta2">
-                    <div class="ppwrap" id="ppw-b1"><button class="ppbtn pph" onclick="openPP(event,'b1')">🔴 High ▾</button><div class="ppmenu" id="ppm-b1"><div class="ppopt" onclick="setPP(event,'b1','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'b1','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'b1','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                    <span class="stag">⚙ <span id="bsrc1">Coca-Cola-Zero-BrandBrief.pdf</span></span>
-                    <span class="htag">#growth</span>
-                    <button class="addtag" onclick="addTag(this)">+ tag</button>
-                  </div>
-                </div>
-                <div class="fbtns"><button class="feditbtn" onclick="editFact('b1')">Edit</button><button class="fdelbtn" onclick="delFact('f-b1')">✕</button></div>
-              </div>
-              <div class="fr" id="f-b2">
-                <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-                <div class="fbd">
-                  <div class="ftxt" id="ft-b2">Core target: 25–40 males, health-conscious but not health-obsessed. High overlap with sports and gaming content.</div>
-                  <textarea class="fedit-area" id="fe-b2">Core target: 25–40 males, health-conscious but not health-obsessed. High overlap with sports and gaming content.</textarea>
-                  <div class="save-row hidden" id="fs-b2"><button class="savebtn" onclick="saveFact('b2')">Save</button><button class="cancelbtn" onclick="cancelEdit('b2')">Cancel</button></div>
-                  <div class="fmeta2">
-                    <div class="ppwrap" id="ppw-b2"><button class="ppbtn pph" onclick="openPP(event,'b2')">🔴 High ▾</button><div class="ppmenu" id="ppm-b2"><div class="ppopt" onclick="setPP(event,'b2','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div><div class="ppopt" onclick="setPP(event,'b2','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div><div class="ppopt" onclick="setPP(event,'b2','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div></div></div>
-                    <span class="stag">⚙ <span class="bsrc">Coca-Cola-Zero-BrandBrief.pdf</span></span>
-                    <span class="htag">#target</span><span class="htag">#gaming</span>
-                    <button class="addtag" onclick="addTag(this)">+ tag</button>
-                  </div>
-                </div>
-                <div class="fbtns"><button class="feditbtn" onclick="editFact('b2')">Edit</button><button class="fdelbtn" onclick="delFact('f-b2')">✕</button></div>
-              </div>
-              <div class="nffm" id="nff-t-b-1"><textarea id="nft-t-b-1" placeholder="Enter fact text…"></textarea><div class="nfrow"><select id="nfp-t-b-1"><option value="h">High priority</option><option value="m" selected>Medium priority</option><option value="l">Low priority</option></select><button class="savebtn" onclick="saveNFF('t-b-1','b')">Add fact</button><button class="cancelbtn" onclick="hideNFF('t-b-1')">Cancel</button></div></div>
-              <button class="afbtn" id="afb-t-b-1" onclick="showNFF('t-b-1')">+ Add fact to this topic</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="be" class="es"><div class="es-ico">✨</div><h4>Select a client and brand</h4><p style="font-size:13px">Choose a client, then a brand to view its Knowledge Bank.</p></div>
-    </div><!-- /pane-b -->
-
-  </main>
-</div><!-- /layout -->
-
-<!-- COPILOT TOGGLE -->
-<button class="cptgl" onclick="toggleCP()" title="Planning Copilot">💬</button>
-
-<!-- COPILOT PANEL -->
-<div class="cppanel" id="cppanel">
-  <div class="cphead">
-    <h3>🤖 Planning Copilot <span style="font-size:11px;font-weight:400;color:#94A3B8;margin-left:4px">Coca-Cola · US</span></h3>
-    <button class="cpclose" onclick="toggleCP()">✕</button>
-  </div>
-  <div class="cpmsgs" id="cpmsgs">
-    <div class="mu">What media mix for Coca-Cola summer campaign targeting US youth?</div>
-    <div class="ma">
-      Based on the Knowledge Bank, here's my recommendation:
-      <div class="mins">
-        <strong>1. Lead with short-form video</strong> (TikTok, Reels) — highest engagement for 18–34.
-        <span class="citwrap">
-          <button class="citbtn" onclick="toggleCit('ct1',event)">ℹ</button>
-          <div class="cittip" id="ct1">
-            <h4>Based on:</h4>
-            <div class="cititem">
-              <div class="ctext">"Mobile-first consumption: 68% of all video viewing globally across 18–54 age groups."</div>
-              <div class="cmeta"><span class="clev">Global</span><span>· Global-Media-Trends-2025.pdf</span></div>
-              <a class="clink" onclick="goKB('g')">View in Knowledge Bank →</a>
-            </div>
-            <div class="cititem">
-              <div class="ctext">"Primary target: 18–35, urban, high social usage. Indexes strongly on TikTok (+140)…"</div>
-              <div class="cmeta"><span class="clev">Client: Coca-Cola</span><span>· Coca-Cola-FY26-MediaStrategy.pdf</span></div>
-              <a class="clink" onclick="goKB('c')">View in Knowledge Bank →</a>
-            </div>
-          </div>
-        </span>
-      </div>
-      <div class="mins">
-        <strong>2. CTV for upper-funnel reach</strong> — CTV growing 34% YoY in premium content.
-        <span class="citwrap">
-          <button class="citbtn" onclick="toggleCit('ct2',event)">ℹ</button>
-          <div class="cittip" id="ct2">
-            <h4>Based on:</h4>
-            <div class="cititem">
-              <div class="ctext">"CTV grew 34% YoY globally, becoming the #1 fastest-growing media channel in 2025."</div>
-              <div class="cmeta"><span class="clev">Global</span><span>· Global-Media-Trends-2025.pdf</span></div>
-              <a class="clink" onclick="goKB('g')">View in Knowledge Bank →</a>
-            </div>
-            <div class="cititem">
-              <div class="ctext">"FY26 campaign theme: 'Real Magic' — authentic human connections over product features."</div>
-              <div class="cmeta"><span class="clev">Client: Coca-Cola</span><span>· Coca-Cola-FY26-MediaStrategy.pdf</span></div>
-              <a class="clink" onclick="goKB('c')">View in Knowledge Bank →</a>
-            </div>
-          </div>
-        </span>
-      </div>
-      <div class="mins">
-        <strong>3. Programmatic display</strong> — 82% of US display is now programmatic.
-        <span class="citwrap">
-          <button class="citbtn" onclick="toggleCit('ct3',event)">ℹ</button>
-          <div class="cittip" id="ct3" style="right:auto;left:0">
-            <h4>Based on:</h4>
-            <div class="cititem">
-              <div class="ctext">"US digital advertising market reached $278 billion in 2025, a 12% YoY increase."</div>
-              <div class="cmeta"><span class="clev">Market: United States</span><span>· US-Market-Intelligence-Q4-2025.pdf</span></div>
-              <a class="clink" onclick="goKB('m')">View in Knowledge Bank →</a>
-            </div>
-            <div class="cititem">
-              <div class="ctext">"Campaign focus: Summer refresh, youth engagement, Real Magic theme."</div>
-              <div class="cmeta"><span class="clev">Brief</span><span>· CocaCola-Summer-Brief.pdf</span></div>
-              <span style="font-size:11px;color:#94A3B8;font-style:italic">(not stored in Knowledge Bank)</span>
-            </div>
-          </div>
-        </span>
       </div>
     </div>
+
+    <!-- ===== CLIENT ===== -->
+    <div class="tab-pane" id="pane-client">
+      <div class="selector-row">
+        <label>Client:</label>
+        <select class="sel"><option>Coca-Cola</option><option>Nike</option><option>Unilever</option></select>
+      </div>
+      <div class="perm-banner edit">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        You have edit access to Coca-Cola Knowledge Bank
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Documents — Coca-Cola</div></div><button class="btn-prim">+ Upload file</button></div>
+        <div class="card-body">
+          <div class="upload-zone"><div class="upload-zone-icon">📄</div><div class="upload-zone-text"><b>Click to upload</b> or drag and drop</div><div class="upload-zone-fmt">PDF · DOCX · PPTX · XLSX</div></div>
+          <div class="file-list">
+            <div class="file-item"><div class="file-ico pdf">📕</div><div class="file-info"><div class="file-name">Coca-Cola-FY26-MediaStrategy.pdf</div><div class="file-meta"><span class="file-cat">Strategy</span>EN · 3 Feb 2026</div></div><button class="file-del" onclick="removeFile(this)">🗑</button></div>
+            <div class="file-item"><div class="file-ico pptx">📙</div><div class="file-info"><div class="file-name">CocaCola-Brand-Guidelines-2025.pptx</div><div class="file-meta"><span class="file-cat">Brand</span>EN · 20 Nov 2025</div></div><button class="file-del" onclick="removeFile(this)">🗑</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Facts — Coca-Cola</div></div></div>
+        <div class="card-body">
+          <div class="facts-hdr">
+            <div class="facts-stat"><b>31</b> active facts &nbsp;·&nbsp; <span class="hp">9 high-priority</span></div>
+            <div class="search-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Search facts…" oninput="searchFacts(this.value,'pane-client')"></div>
+            <button class="btn-add-topic" onclick="addTopicPrompt('client-topics')">+ Add topic</button>
+          </div>
+          <div class="topics" id="client-topics">
+            <div class="topic-card open" id="t-c1">
+              <div class="topic-hdr" onclick="toggleTopic('t-c1')"><div class="topic-ico">🎯</div><div class="topic-info"><div class="topic-name">Brand Positioning</div><div class="topic-desc">Promise, pillars, differentiation</div></div><div class="topic-ctrl"><div class="topic-dot"></div><div class="topic-badge">4/4</div><div class="topic-chevron">▼</div></div></div>
+              <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">Coca-Cola positions as universal symbol of happiness and refreshment. FY26 theme "Real Magic" focuses on authentic human connections. Premium OTT and sports sponsorships are preferred media environments.</div></div>
+              <div class="topic-facts">
+                <div class="fact-row" id="f-c1-1"><div class="fact-check">✓</div><div class="fact-body">
+                  <div class="fact-text">Coca-Cola brand value: #6 globally at $57.5B (Interbrand 2025). Key differentiator: emotional nostalgia + universal appeal.</div>
+                  <div class="fact-meta"><button class="pp high" onclick="openPP(event,'f-c1-1')">↑ High priority ▾<div class="pp-dd" id="dd-f-c1-1"><div class="pp-dd-item" onclick="setPP(event,'f-c1-1','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-c1-1','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-c1-1','low')"><span class="pp-dot low"></span>Low priority</div></div></button><span class="src-tag">⚙ Coca-Cola-FY26-MediaStrategy.pdf</span><button class="btn-xs" onclick="editFact('f-c1-1')">Edit</button><button class="btn-xs danger" onclick="delFact('f-c1-1')">Delete</button></div>
+                  <div class="fact-edit-wrap" id="ew-f-c1-1"><textarea rows="2">Coca-Cola brand value: #6 globally at $57.5B (Interbrand 2025). Key differentiator: emotional nostalgia + universal appeal.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-c1-1')">Save</button><button class="btn-xs" onclick="cancelEdit('f-c1-1')">Cancel</button></div></div>
+                </div></div>
+                <div class="fact-row" id="f-c1-2"><div class="fact-check">✓</div><div class="fact-body">
+                  <div class="fact-text">FY26 campaign theme: "Real Magic" — emphasizing authentic human connections over product features.</div>
+                  <div class="fact-meta"><button class="pp high" onclick="openPP(event,'f-c1-2')">↑ High priority ▾<div class="pp-dd" id="dd-f-c1-2"><div class="pp-dd-item" onclick="setPP(event,'f-c1-2','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-c1-2','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-c1-2','low')"><span class="pp-dot low"></span>Low priority</div></div></button><span class="src-tag">⚙ CocaCola-Brand-Guidelines-2025.pptx</span><span class="hash-tag">#campaign</span><button class="btn-xs" onclick="editFact('f-c1-2')">Edit</button><button class="btn-xs danger" onclick="delFact('f-c1-2')">Delete</button></div>
+                  <div class="fact-edit-wrap" id="ew-f-c1-2"><textarea rows="2">FY26 campaign theme: "Real Magic" — emphasizing authentic human connections over product features.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-c1-2')">Save</button><button class="btn-xs" onclick="cancelEdit('f-c1-2')">Cancel</button></div></div>
+                </div></div>
+                <div class="fact-row" id="f-c1-3"><div class="fact-check">✓</div><div class="fact-body">
+                  <div class="fact-text">Preferred media partners: premium OTT (Netflix, Disney+), sports sponsorships (UEFA, Olympics), music events.</div>
+                  <div class="fact-meta"><button class="pp medium" onclick="openPP(event,'f-c1-3')">~ Medium priority ▾<div class="pp-dd" id="dd-f-c1-3"><div class="pp-dd-item" onclick="setPP(event,'f-c1-3','high')"><span class="pp-dot high"></span>High priority</div><div class="pp-dd-item" onclick="setPP(event,'f-c1-3','medium')"><span class="pp-dot medium"></span>Medium priority</div><div class="pp-dd-item" onclick="setPP(event,'f-c1-3','low')"><span class="pp-dot low"></span>Low priority</div></div></button><span class="src-tag manual">manual</span><span class="hash-tag">#partners</span><span class="hash-tag">#sponsorship</span><button class="btn-xs" onclick="editFact('f-c1-3')">Edit</button><button class="btn-xs danger" onclick="delFact('f-c1-3')">Delete</button></div>
+                  <div class="fact-edit-wrap" id="ew-f-c1-3"><textarea rows="2">Preferred media partners: premium OTT (Netflix, Disney+), sports sponsorships (UEFA, Olympics), music events.</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('f-c1-3')">Save</button><button class="btn-xs" onclick="cancelEdit('f-c1-3')">Cancel</button></div></div>
+                </div></div>
+                <button class="add-fact-btn" onclick="showAddFact('t-c1')">+ Add fact to this topic</button>
+              </div>
+            </div>
+            <div class="topic-card" id="t-c2">
+              <div class="topic-hdr" onclick="toggleTopic('t-c2')"><div class="topic-ico">🏆</div><div class="topic-info"><div class="topic-name">Campaign History</div><div class="topic-desc">Past campaigns, awards, performance data</div></div><div class="topic-ctrl"><div class="topic-badge">7/7</div><div class="topic-chevron">▼</div></div></div>
+              <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">3 Effie Awards in 2 years. "Real Magic" drove 8% brand awareness uplift in 18–34. "Share a Coke" remains the highest-performing personalization campaign with 2.4% sales uplift.</div></div>
+              <div class="topic-facts">
+                <div class="fact-row"><div class="fact-check">✓</div><div class="fact-body"><div class="fact-text">Effie Gold Award 2025 — "Real Magic" global campaign. Drove 8% brand awareness uplift in 18–34 demographic.</div><div class="fact-meta"><button class="pp high">↑ High priority ▾</button><span class="src-tag">⚙ Coca-Cola-FY26-MediaStrategy.pdf</span><span class="hash-tag">#award</span><button class="btn-xs">Edit</button></div></div></div>
+                <button class="add-fact-btn">+ Add fact to this topic</button>
+              </div>
+            </div>
+            <div class="topic-card" id="t-c3">
+              <div class="topic-hdr" onclick="toggleTopic('t-c3')"><div class="topic-ico">👤</div><div class="topic-info"><div class="topic-name">Target Audience</div><div class="topic-desc">Key segments, personas, demographics</div></div><div class="topic-ctrl"><div class="topic-dot"></div><div class="topic-badge">5/5</div><div class="topic-chevron">▼</div></div></div>
+              <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">Primary: Gen Z & Millennials 18–35, urban, social-native. High index on TikTok (+140) and Instagram (+122). Secondary: family units during holidays.</div></div>
+              <div class="topic-facts">
+                <div class="fact-row"><div class="fact-check">✓</div><div class="fact-body"><div class="fact-text">Primary target: 18–35, urban, high social media usage. Indexes strongly on TikTok (+140) and Instagram (+122).</div><div class="fact-meta"><button class="pp high">↑ High priority ▾</button><span class="src-tag">⚙ Coca-Cola-FY26-MediaStrategy.pdf</span><span class="hash-tag">#audience</span><button class="btn-xs">Edit</button></div></div></div>
+                <button class="add-fact-btn">+ Add fact to this topic</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BRAND ===== -->
+    <div class="tab-pane" id="pane-brand">
+      <div class="selector-row">
+        <label>Client:</label>
+        <select class="sel" style="margin-right:8px"><option>Coca-Cola</option><option>Nike</option></select>
+        <label>Brand:</label>
+        <select class="sel"><option>Coca-Cola Zero</option><option>Coca-Cola Classic</option><option>Sprite</option></select>
+      </div>
+      <div class="perm-banner edit">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        You have edit access to Coca-Cola Zero Knowledge Bank
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Documents — Coca-Cola Zero</div></div><button class="btn-prim">+ Upload file</button></div>
+        <div class="card-body">
+          <div class="upload-zone"><div class="upload-zone-icon">📄</div><div class="upload-zone-text"><b>Click to upload</b> or drag and drop</div><div class="upload-zone-fmt">PDF · DOCX · PPTX · XLSX</div></div>
+          <div class="file-list"><div class="file-item"><div class="file-ico pdf">📕</div><div class="file-info"><div class="file-name">CokeZero-FY26-BrandBrief.pdf</div><div class="file-meta"><span class="file-cat">Brand</span>EN · 1 Mar 2026</div></div><button class="file-del" onclick="removeFile(this)">🗑</button></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Facts — Coca-Cola Zero</div></div></div>
+        <div class="card-body">
+          <div class="facts-hdr">
+            <div class="facts-stat"><b>12</b> active facts &nbsp;·&nbsp; <span class="hp">4 high-priority</span></div>
+            <div class="search-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Search facts…"></div>
+            <button class="btn-add-topic">+ Add topic</button>
+          </div>
+          <div class="topics">
+            <div class="topic-card open" id="t-b1">
+              <div class="topic-hdr" onclick="toggleTopic('t-b1')"><div class="topic-ico">🥤</div><div class="topic-info"><div class="topic-name">Brand Essence</div><div class="topic-desc">Zero Sugar positioning, taste parity messaging</div></div><div class="topic-ctrl"><div class="topic-dot"></div><div class="topic-badge">3/3</div><div class="topic-chevron">▼</div></div></div>
+              <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">Coca-Cola Zero positions around taste parity with Classic while targeting health-conscious consumers. Core: "Real Taste. Zero Sugar." Appeals primarily to 25–40 males with sports/gaming overlap.</div></div>
+              <div class="topic-facts">
+                <div class="fact-row"><div class="fact-check">✓</div><div class="fact-body"><div class="fact-text">Coke Zero grew 8% volume YoY in 2025, outperforming category average of 3%. Strongest in US and Western Europe.</div><div class="fact-meta"><button class="pp high">↑ High priority ▾</button><span class="src-tag">⚙ CokeZero-FY26-BrandBrief.pdf</span><button class="btn-xs">Edit</button></div></div></div>
+                <div class="fact-row"><div class="fact-check">✓</div><div class="fact-body"><div class="fact-text">Core target: 25–40 males, health-conscious but not health-obsessed. High overlap with sports and gaming content.</div><div class="fact-meta"><button class="pp high">↑ High priority ▾</button><span class="src-tag">⚙ CokeZero-FY26-BrandBrief.pdf</span><span class="hash-tag">#target</span><span class="hash-tag">#gaming</span><button class="btn-xs">Edit</button></div></div></div>
+                <button class="add-fact-btn">+ Add fact to this topic</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- COPILOT DEMO PANEL -->
+<div class="demo-panel" id="demo-panel">
+  <div class="demo-hdr">
+    <span>✨ Planning Agent — Citation Demo</span>
+    <button onclick="document.getElementById('demo-panel').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:16px;line-height:1">×</button>
   </div>
-  <div class="cpinr">
-    <input class="cpinput" id="cpinput" type="text" placeholder="Ask about media planning…" onkeydown="if(event.key==='Enter')sendCP()">
-    <button class="cpsend" onclick="sendCP()">Send</button>
+  <div class="demo-body">
+    <div class="demo-tip">Hover <b>ℹ</b> to see which KB facts informed each insight.</div>
+    <div class="insight">
+      <div class="insight-text">Recommend prioritizing CTV and digital video — strong global trends align with US market growth.</div>
+      <div class="cit-btn" onclick="toggleCit('cit1',event)">ℹ
+        <div class="cit-tip" id="cit1">
+          <div class="cit-tip-title">Based on facts:</div>
+          <div class="cit-fact">
+            <div class="cit-fact-text">"CTV grew 34% year-over-year globally, becoming the #1 fastest-growing media channel in 2025."</div>
+            <div class="cit-meta-row"><span class="lbl">Level:</span><span class="lev-badge global">Global</span></div>
+            <div class="cit-meta-row"><span class="lbl">Source:</span>Global-Media-Trends-2025.pdf</div>
+            <div class="cit-meta-row"><span class="lbl">Stored in:</span>Global Knowledge Bank</div>
+            <a class="cit-link" onclick="goKB('global')">View in Knowledge Bank →</a>
+          </div>
+          <div class="cit-fact">
+            <div class="cit-fact-text">"US digital advertising market reached $278 billion in 2025, a 12% YoY increase."</div>
+            <div class="cit-meta-row"><span class="lbl">Level:</span><span class="lev-badge market">Market — United States</span></div>
+            <div class="cit-meta-row"><span class="lbl">Source:</span>US-Market-Intelligence-Q4-2025.pdf</div>
+            <div class="cit-meta-row"><span class="lbl">Stored in:</span>Market Knowledge Bank</div>
+            <a class="cit-link" onclick="goKB('market')">View in Knowledge Bank →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-text">Align creative with gaming and sports contexts — Coke Zero's core audience indexes high on both.</div>
+      <div class="cit-btn" onclick="toggleCit('cit2',event)">ℹ
+        <div class="cit-tip" id="cit2" style="right:auto;left:0">
+          <div class="cit-tip-title">Based on facts:</div>
+          <div class="cit-fact">
+            <div class="cit-fact-text">"Core target: 25–40 males, health-conscious but not health-obsessed. High overlap with sports and gaming content."</div>
+            <div class="cit-meta-row"><span class="lbl">Level:</span><span class="lev-badge brand">Brand — Coca-Cola Zero</span></div>
+            <div class="cit-meta-row"><span class="lbl">Source:</span>CokeZero-FY26-BrandBrief.pdf</div>
+            <div class="cit-meta-row"><span class="lbl">Stored in:</span>Brand Knowledge Bank</div>
+            <a class="cit-link" onclick="goKB('brand')">View in Knowledge Bank →</a>
+          </div>
+          <div class="cit-fact">
+            <div class="cit-fact-text">"Campaign focus: youth 18-25, digital-first approach, high engagement on social platforms."</div>
+            <div class="cit-meta-row"><span class="lbl">Level:</span><span class="lev-badge brief">Brief</span></div>
+            <div class="cit-meta-row"><span class="lbl">Source:</span>CampaignBrief-FY26.pdf</div>
+            <div class="cit-meta-row" style="color:var(--gray-400);font-size:11px;font-style:italic">(not stored in Knowledge Bank)</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── ROLE / PERMISSIONS ──
-const perms = {
-  ga:{g:'e',m:'r',c:'r',b:'r'},
-  ma:{g:'r',m:'e',c:'r',b:'r'},
-  ca:{g:'r',m:'r',c:'e',b:'e'},
-  pl:{g:'r',m:'r',c:'r',b:'r'},
-};
-let role = 'ga';
-
-function changeRole(r) {
-  role = r;
-  applyPerms();
-  toast('View as: ' + document.getElementById('rolesel').options[document.getElementById('rolesel').selectedIndex].text);
+// TABS
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pane-' + name).classList.add('active');
 }
 
-function applyPerms() {
-  const p = perms[role];
-  ['g','m','c','b'].forEach(t => {
-    const pb = document.getElementById('pb-'+t);
-    if (!pb) return;
-    const isEdit = p[t] === 'e';
-    pb.className = 'pb ' + (isEdit ? 'edit' : 'ro');
-    pb.innerHTML = isEdit
-      ? '✅ You have <strong>edit access</strong> to this Knowledge Bank.'
-      : '🔒 <strong>Read-only access.</strong> Contact an Admin to make changes.';
-    const pane = document.getElementById('pane-'+t);
-    if (!pane) return;
-    pane.querySelectorAll('.feditbtn,.fdelbtn,.fdel,.afbtn,.atbtn,.ubtn,.uzone').forEach(el => {
-      el.style.opacity = isEdit ? '' : '0.3';
-      el.style.pointerEvents = isEdit ? '' : 'none';
-    });
-  });
-}
-
-// ── TABS ──
-function switchTab(t, el) {
-  ['g','m','c','b'].forEach(id => {
-    document.getElementById('pane-'+id).classList.add('hidden');
-    document.getElementById('tab-'+id).classList.remove('on');
-  });
-  document.getElementById('pane-'+t).classList.remove('hidden');
-  el.classList.add('on');
-}
-
-// ── TOPIC TOGGLE ──
-function toggleTC(id) {
+// TOPIC TOGGLE
+function toggleTopic(id) {
   document.getElementById(id).classList.toggle('open');
 }
 
-// ── PRIORITY PILL ──
+// PRIORITY PILL
+let activePP = null;
 function openPP(e, fid) {
   e.stopPropagation();
-  document.querySelectorAll('.ppmenu.show').forEach(m => { if (m !== document.getElementById('ppm-'+fid)) m.classList.remove('show'); });
-  const m = document.getElementById('ppm-'+fid);
-  m.classList.toggle('show');
+  const dd = document.getElementById('dd-' + fid);
+  if (activePP && activePP !== dd) activePP.classList.remove('open');
+  dd.classList.toggle('open');
+  activePP = dd.classList.contains('open') ? dd : null;
 }
-function setPP(e, fid, lv) {
+function setPP(e, fid, level) {
   e.stopPropagation();
-  const btn = document.querySelector('#ppw-'+fid+' .ppbtn');
-  const cls = {h:'pph',m:'ppm',l:'ppl'};
-  const lbl = {h:'🔴 High ▾',m:'🟡 Medium ▾',l:'⚪ Low ▾'};
-  btn.className = 'ppbtn ' + cls[lv];
-  btn.firstChild.textContent = lbl[lv];
-  // keep dropdown html: just close
-  document.getElementById('ppm-'+fid).classList.remove('show');
+  const row = document.getElementById(fid);
+  const btn = row.querySelector('.pp');
+  const labels = {high:'↑ High priority ▾', medium:'~ Medium priority ▾', low:'↓ Low priority ▾'};
+  btn.className = 'pp ' + level;
+  // rebuild dropdown html inside btn
+  const ddId = 'dd-' + fid;
+  btn.innerHTML = labels[level] + `<div class="pp-dd" id="${ddId}">
+    <div class="pp-dd-item" onclick="setPP(event,'${fid}','high')"><span class="pp-dot high"></span>High priority</div>
+    <div class="pp-dd-item" onclick="setPP(event,'${fid}','medium')"><span class="pp-dot medium"></span>Medium priority</div>
+    <div class="pp-dd-item" onclick="setPP(event,'${fid}','low')"><span class="pp-dot low"></span>Low priority</div>
+  </div>`;
+  btn.onclick = ev => openPP(ev, fid);
+  activePP = null;
   toast('Priority updated');
 }
 document.addEventListener('click', () => {
-  document.querySelectorAll('.ppmenu.show').forEach(m => m.classList.remove('show'));
-  document.querySelectorAll('.cittip.show').forEach(t => t.classList.remove('show'));
-  document.querySelectorAll('.citbtn.on').forEach(b => b.classList.remove('on'));
+  if (activePP) { activePP.classList.remove('open'); activePP = null; }
+  document.querySelectorAll('.cit-tip').forEach(t => t.classList.remove('open'));
 });
 
-// ── EDIT FACT ──
+// EDIT FACT
 function editFact(fid) {
-  const txt = document.getElementById('ft-'+fid);
-  const ea = document.getElementById('fe-'+fid);
-  const sr = document.getElementById('fs-'+fid);
-  if (!ea) return;
-  const editing = ea.style.display === 'block';
-  if (editing) { cancelEdit(fid); return; }
-  ea.value = txt.textContent.trim();
+  const row = document.getElementById(fid);
+  const txt = row.querySelector('.fact-text');
+  const wrap = document.getElementById('ew-' + fid);
+  if (!wrap) return;
+  const isEditing = wrap.style.display === 'block';
+  if (isEditing) { cancelEdit(fid); return; }
+  wrap.querySelector('textarea').value = txt.textContent.trim();
   txt.style.display = 'none';
-  ea.style.display = 'block';
-  sr.classList.remove('hidden');
-  ea.focus();
+  wrap.style.display = 'block';
+  wrap.querySelector('textarea').focus();
 }
 function saveFact(fid) {
-  const txt = document.getElementById('ft-'+fid);
-  const ea = document.getElementById('fe-'+fid);
-  const sr = document.getElementById('fs-'+fid);
-  const val = ea.value.trim();
+  const row = document.getElementById(fid);
+  const txt = row.querySelector('.fact-text');
+  const wrap = document.getElementById('ew-' + fid);
+  const val = wrap.querySelector('textarea').value.trim();
   if (val) txt.textContent = val;
   txt.style.display = '';
-  ea.style.display = 'none';
-  sr.classList.add('hidden');
-  toast('Fact saved');
+  wrap.style.display = 'none';
+  toast('Fact saved · AI summary regenerating…');
 }
 function cancelEdit(fid) {
-  const txt = document.getElementById('ft-'+fid);
-  const ea = document.getElementById('fe-'+fid);
-  const sr = document.getElementById('fs-'+fid);
-  txt.style.display = '';
-  if (ea) { ea.style.display = 'none'; ea.value = txt.textContent.trim(); }
-  if (sr) sr.classList.add('hidden');
+  const row = document.getElementById(fid);
+  row.querySelector('.fact-text').style.display = '';
+  const wrap = document.getElementById('ew-' + fid);
+  if (wrap) wrap.style.display = 'none';
 }
 
-// ── DELETE FACT ──
-function delFact(rowId) {
-  const r = document.getElementById(rowId);
-  r.classList.add('fading');
-  setTimeout(() => { r.remove(); toast('Fact deleted'); }, 280);
+// DELETE FACT
+function delFact(fid) {
+  const row = document.getElementById(fid);
+  row.style.transition = 'opacity .3s';
+  row.style.opacity = '0';
+  setTimeout(() => { row.remove(); toast('Fact deleted'); }, 300);
 }
 
-// ── ADD FACT FORM ──
-function showNFF(tid) {
-  document.getElementById('nff-'+tid).classList.add('show');
-  document.getElementById('afb-'+tid).classList.add('hidden');
-  document.getElementById('nft-'+tid).focus();
-}
-function hideNFF(tid) {
-  document.getElementById('nff-'+tid).classList.remove('show');
-  document.getElementById('afb-'+tid).classList.remove('hidden');
-  document.getElementById('nft-'+tid).value = '';
-}
-let fc = 200;
-function saveNFF(tid, pre) {
-  const ta = document.getElementById('nft-'+tid);
-  const txt = ta.value.trim();
-  if (!txt) { toast('Please enter fact text'); return; }
-  const pv = document.getElementById('nfp-'+tid).value;
-  const fid = pre + (++fc);
-  const cls = {h:'pph',m:'ppm',l:'ppl'};
-  const lbl = {h:'🔴 High ▾',m:'🟡 Medium ▾',l:'⚪ Low ▾'};
-  const row = document.createElement('div');
-  row.className = 'fr'; row.id = 'f-'+fid;
-  row.innerHTML = `
-    <div class="fchk"><svg width="10" height="10" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-    <div class="fbd">
-      <div class="ftxt" id="ft-${fid}">${esc(txt)}</div>
-      <textarea class="fedit-area" id="fe-${fid}" style="display:none">${esc(txt)}</textarea>
-      <div class="save-row hidden" id="fs-${fid}"><button class="savebtn" onclick="saveFact('${fid}')">Save</button><button class="cancelbtn" onclick="cancelEdit('${fid}')">Cancel</button></div>
-      <div class="fmeta2">
-        <div class="ppwrap" id="ppw-${fid}">
-          <button class="ppbtn ${cls[pv]}" onclick="openPP(event,'${fid}')">${lbl[pv]}</button>
-          <div class="ppmenu" id="ppm-${fid}">
-            <div class="ppopt" onclick="setPP(event,'${fid}','h')"><span class="ppdot" style="background:var(--red)"></span>High priority</div>
-            <div class="ppopt" onclick="setPP(event,'${fid}','m')"><span class="ppdot" style="background:var(--amber)"></span>Medium priority</div>
-            <div class="ppopt" onclick="setPP(event,'${fid}','l')"><span class="ppdot" style="background:#94A3B8"></span>Low priority</div>
-          </div>
-        </div>
-        <span class="stag">manual</span>
-        <button class="addtag" onclick="addTag(this)">+ tag</button>
-      </div>
-    </div>
-    <div class="fbtns"><button class="feditbtn" onclick="editFact('${fid}')">Edit</button><button class="fdelbtn" onclick="delFact('f-${fid}')">✕</button></div>`;
-  const nff = document.getElementById('nff-'+tid);
-  nff.parentNode.insertBefore(row, nff);
-  hideNFF(tid);
-  toast('Fact added');
-}
-
-// ── ADD TAG ──
-function addTag(btn) {
-  const name = prompt('Tag name (without #):');
-  if (!name || !name.trim()) return;
-  const span = document.createElement('span');
-  span.className = 'htag';
-  span.textContent = '#'+name.trim().toLowerCase().replace(/\s+/g,'-');
-  btn.parentNode.insertBefore(span, btn);
-  toast('Tag added');
-}
-
-// ── ADD TOPIC ──
-function showNTF(t) {
-  document.getElementById('ntf-'+t).classList.add('show');
-  document.getElementById('ntn-'+t).focus();
-}
-function hideNTF(t) {
-  document.getElementById('ntf-'+t).classList.remove('show');
-  document.getElementById('ntn-'+t).value = '';
-}
-function saveNTF(t) {
-  const name = document.getElementById('ntn-'+t).value.trim();
-  if (!name) { toast('Please enter a topic name'); return; }
-  const id = 't-'+t+'-'+Date.now();
-  const card = document.createElement('div');
-  card.className = 'tc'; card.id = id;
-  card.innerHTML = `
-    <div class="tch" onclick="toggleTC('${id}')">
-      <div class="tci" style="background:#F8FAFC">📌</div>
-      <div class="tcn"><div class="tcname">${esc(name)}</div><div class="tcdesc">New topic — add facts below</div></div>
-      <div class="tcb"><span class="tcct">0/0</span><span class="tcarrow">▼</span></div>
-    </div>
-    <div class="tcsum" style="font-style:italic;color:#94A3B8;font-size:13px">No facts yet. Add facts to generate an AI summary.</div>
-    <div class="tcbody">
-      <div class="nffm" id="nff-${id}"><textarea id="nft-${id}" placeholder="Enter fact text…"></textarea><div class="nfrow"><select id="nfp-${id}"><option value="h">High priority</option><option value="m" selected>Medium priority</option><option value="l">Low priority</option></select><button class="savebtn" onclick="saveNFF('${id}','x')">Add fact</button><button class="cancelbtn" onclick="hideNFF('${id}')">Cancel</button></div></div>
-      <button class="afbtn" id="afb-${id}" onclick="showNFF('${id}')">+ Add fact to this topic</button>
+// ADD FACT
+function showAddFact(topicId) {
+  const topic = document.getElementById(topicId);
+  if (topic.querySelector('.new-fact')) return;
+  const addBtn = topic.querySelector('.add-fact-btn');
+  const uid = 'nf-' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'new-fact';
+  div.id = uid;
+  div.innerHTML = `<textarea rows="2" placeholder="Enter fact text…"></textarea>
+    <div class="new-fact-ctrl">
+      <button class="btn-xs prim" onclick="saveNewFact('${topicId}','${uid}')">Add fact</button>
+      <button class="btn-xs" onclick="document.getElementById('${uid}').remove()">Cancel</button>
     </div>`;
-  document.getElementById('tl-'+t).appendChild(card);
-  card.classList.add('open');
-  hideNTF(t);
-  toast('Topic "'+name+'" created');
+  topic.querySelector('.topic-facts').insertBefore(div, addBtn);
+  div.querySelector('textarea').focus();
 }
-
-// ── SEARCH ──
-function searchFacts(q, listId) {
-  const query = q.toLowerCase();
-  const container = document.getElementById(listId);
-  if (!container) return;
-  container.querySelectorAll('.tc').forEach(tc => {
-    let any = false;
-    tc.querySelectorAll('.ftxt').forEach(ft => {
-      const show = !query || ft.textContent.toLowerCase().includes(query);
-      ft.closest('.fr').style.display = show ? '' : 'none';
-      if (show) any = true;
-    });
-    tc.style.display = (query && !any) ? 'none' : '';
-    if (query && any) tc.classList.add('open');
-  });
-}
-
-// ── UPLOAD SIMULATION ──
-const uploadNames = ['Annual-Report-2026.pdf','Campaign-Brief-Q3.docx','Market-Analysis-2026.pptx'];
-function simUpload(t) {
-  const fname = uploadNames[Math.floor(Math.random()*uploadNames.length)];
-  const sk = document.getElementById('sk-'+t);
-  if (sk) {
-    sk.classList.remove('hidden');
-    setTimeout(() => { sk.classList.add('hidden'); appendFile(t,fname); toast('Facts extracted from '+fname); }, 2200);
-  } else {
-    appendFile(t, fname);
-    toast('File uploaded: '+fname);
-  }
-}
-function appendFile(t, fname) {
-  const list = document.getElementById('fl-'+t);
-  if (!list) return;
-  const id = 'fr-'+t+Date.now();
+function saveNewFact(topicId, uid) {
+  const div = document.getElementById(uid);
+  const text = div.querySelector('textarea').value.trim();
+  if (!text) return;
+  const topic = document.getElementById(topicId);
+  const fid = 'f-new-' + Date.now();
   const row = document.createElement('div');
-  row.className = 'frow'; row.id = id;
-  row.innerHTML = `<div class="ficon">📄</div><div class="finfo"><div class="fname">${esc(fname)}</div><div class="fmeta">Uploaded just now</div></div><span class="ftag">New</span><button class="fdel" onclick="removeFile('${id}')">🗑</button>`;
-  list.appendChild(row);
-}
-function removeFile(id) {
-  const r = document.getElementById(id);
-  r.classList.add('fading');
-  setTimeout(() => { r.remove(); toast('File removed'); }, 260);
-}
-
-// ── SELECTORS ──
-function loadMarket(v) {
-  const c = document.getElementById('mc'), e = document.getElementById('me');
-  if (!v) { c.classList.add('hidden'); e.classList.remove('hidden'); return; }
-  c.classList.remove('hidden'); e.classList.add('hidden');
-  const data = {
-    us:{f:'US-Market-Intelligence-Q4-2025.pdf',tag:'United States',sum:'US digital ad market reached $278B in 2025. Retail media grew 38% YoY. Google and Meta hold 52% combined share.',fact:'US digital advertising market reached $278 billion in 2025, a 12% YoY increase.'},
-    uk:{f:'UK-Media-Landscape-2025.pdf',tag:'United Kingdom',sum:'UK digital share reached 67% of total ad spend. BVOD saw 28% growth. Privacy regulations reshaping targeting strategies.',fact:'UK digital ad share reached 67% of total spend in 2025. BVOD (Broadcast Video on Demand) grew 28% YoY.'},
-    de:{f:'Germany-Digital-Report-2025.pdf',tag:'Germany',sum:'German market remains TV-heavy but digital growing at 15% YoY. Privacy regulations significantly impact audience targeting.',fact:'Germany digital ad growth 15% YoY. TV still dominant at 38% share, but streaming adoption accelerating.'},
-  };
-  const d = data[v];
-  document.getElementById('mfname').textContent = d.f;
-  document.getElementById('mftag').textContent = d.tag;
-  document.getElementById('msum1').textContent = d.sum;
-  document.getElementById('ft-m1').textContent = d.fact;
-  document.getElementById('fe-m1').value = d.fact;
-  document.getElementById('msrc1').textContent = d.f;
-  applyPerms();
+  row.className = 'fact-row';
+  row.id = fid;
+  row.innerHTML = `<div class="fact-check">✓</div><div class="fact-body">
+    <div class="fact-text">${text.replace(/</g,'&lt;')}</div>
+    <div class="fact-meta">
+      <button class="pp medium" onclick="openPP(event,'${fid}')">~ Medium priority ▾<div class="pp-dd" id="dd-${fid}">
+        <div class="pp-dd-item" onclick="setPP(event,'${fid}','high')"><span class="pp-dot high"></span>High priority</div>
+        <div class="pp-dd-item" onclick="setPP(event,'${fid}','medium')"><span class="pp-dot medium"></span>Medium priority</div>
+        <div class="pp-dd-item" onclick="setPP(event,'${fid}','low')"><span class="pp-dot low"></span>Low priority</div>
+      </div></button>
+      <span class="src-tag manual">manual</span>
+      <button class="btn-xs" onclick="editFact('${fid}')">Edit</button>
+      <button class="btn-xs danger" onclick="delFact('${fid}')">Delete</button>
+    </div>
+    <div class="fact-edit-wrap" id="ew-${fid}"><textarea rows="2">${text.replace(/</g,'&lt;')}</textarea><div class="edit-actions"><button class="btn-xs prim" onclick="saveFact('${fid}')">Save</button><button class="btn-xs" onclick="cancelEdit('${fid}')">Cancel</button></div></div>
+  </div>`;
+  topic.querySelector('.topic-facts').insertBefore(row, div);
+  div.remove();
+  toast('Fact added · AI summary regenerating…');
 }
 
-function loadClient(v) {
-  const c = document.getElementById('cc-content'), e = document.getElementById('ce');
-  if (!v) { c.classList.add('hidden'); e.classList.remove('hidden'); return; }
-  c.classList.remove('hidden'); e.classList.add('hidden');
-  const data = {
-    cc:{f:'Coca-Cola-FY26-MediaStrategy.pdf',tag:'Coca-Cola',f1:'Coca-Cola brand value: #6 globally at $57.5B (Interbrand 2025). Key differentiator: emotional nostalgia + universal appeal.',f2:'FY26 campaign theme: "Real Magic" — authentic human connections over product features.'},
-    nk:{f:'Nike-Global-Brief-2026.pdf',tag:'Nike',f1:'Nike brand value: #13 globally. "Just Do It" — performance and inspiration are the two non-negotiable brand pillars.',f2:'Nike FY26 focus: digital-first approach with emphasis on creator partnerships and community.'},
-    ul:{f:'Unilever-Sustainability-2026.pdf',tag:'Unilever',f1:'Unilever commits to sustainability messaging across all brands; 50% of media weight to purpose-led content by 2026.',f2:'Unilever targets conscious consumers 25–45. Key message: "Every brand has a purpose beyond product."'},
-  };
-  const d = data[v];
-  document.getElementById('cfname').textContent = d.f;
-  document.getElementById('cftag').textContent = d.tag;
-  document.getElementById('ft-c1').textContent = d.f1;
-  document.getElementById('fe-c1').value = d.f1;
-  document.getElementById('csrc1').textContent = '⚙ '+d.f;
-  document.getElementById('ft-c2').textContent = d.f2;
-  document.getElementById('fe-c2').value = d.f2;
-  document.getElementById('csrc2').textContent = '⚙ '+d.f;
-  applyPerms();
+// ADD TOPIC
+function addTopicPrompt(containerId) {
+  const name = prompt('Topic name:');
+  if (!name) return;
+  const container = document.getElementById(containerId);
+  const id = 't-new-' + Date.now();
+  const card = document.createElement('div');
+  card.className = 'topic-card';
+  card.id = id;
+  card.innerHTML = `<div class="topic-hdr" onclick="toggleTopic('${id}')">
+    <div class="topic-ico">📌</div>
+    <div class="topic-info"><div class="topic-name">${name.replace(/</g,'&lt;')}</div><div class="topic-desc">New topic — add facts below</div></div>
+    <div class="topic-ctrl"><div class="topic-badge">0/0</div><div class="topic-chevron">▼</div></div>
+  </div>
+  <div class="topic-summary"><div class="topic-summary-label">AI Summary</div><div class="topic-summary-text">No facts yet. Add facts to generate an AI summary.</div></div>
+  <div class="topic-facts"><button class="add-fact-btn" onclick="showAddFact('${id}')">+ Add fact to this topic</button></div>`;
+  container.appendChild(card);
+  toast('Topic "' + name + '" created');
 }
 
-const brandMap = {
-  cc:['Coca-Cola Classic','Sprite','Fanta','Coke Zero'],
-  nk:['Nike Running','Jordan','Nike SB'],
-};
-function loadBrandClient(v) {
-  const bs = document.getElementById('brsel'), bl = document.getElementById('blbl');
-  const bc = document.getElementById('bc'), be = document.getElementById('be');
-  bc.classList.add('hidden'); be.classList.remove('hidden');
-  if (!v || !brandMap[v]) { bs.classList.add('hidden'); bl.classList.add('hidden'); return; }
-  bs.innerHTML = '<option value="">— Select brand —</option>';
-  brandMap[v].forEach(br => {
-    const o = document.createElement('option');
-    o.value = br.toLowerCase().replace(/\s+/g,'-');
-    o.textContent = br;
-    bs.appendChild(o);
+// SEARCH
+function searchFacts(q, paneId) {
+  const pane = document.getElementById(paneId);
+  const query = q.toLowerCase().trim();
+  pane.querySelectorAll('.fact-row').forEach(r => {
+    const t = r.querySelector('.fact-text')?.textContent.toLowerCase() || '';
+    r.style.display = (!query || t.includes(query)) ? '' : 'none';
   });
-  bs.classList.remove('hidden'); bl.classList.remove('hidden');
-}
-function loadBrand(v) {
-  const bc = document.getElementById('bc'), be = document.getElementById('be');
-  if (!v) { bc.classList.add('hidden'); be.classList.remove('hidden'); return; }
-  bc.classList.remove('hidden'); be.classList.add('hidden');
-  const name = document.getElementById('brsel').options[document.getElementById('brsel').selectedIndex].text;
-  document.getElementById('bfname').textContent = name+'-Brand-Brief-2026.pdf';
-  document.getElementById('bftag').textContent = name;
-  document.getElementById('btopic1').textContent = name+' Brand Essence';
-  document.getElementById('bsum1').textContent = name+' brand knowledge loaded. Review and edit facts below to ensure accuracy.';
-  document.getElementById('ft-b1').textContent = name+' grew volume YoY in 2025. Strong performance in key markets.';
-  document.getElementById('ft-b2').textContent = name+' targets its core demographic with distinct brand identity. Mandatory brand guidelines apply to all executions.';
-  document.querySelectorAll('.bsrc').forEach(el => el.textContent = name+'-Brand-Brief-2026.pdf');
-  applyPerms();
+  pane.querySelectorAll('.topic-card').forEach(c => {
+    const visible = Array.from(c.querySelectorAll('.fact-row')).some(r => r.style.display !== 'none');
+    c.style.display = (!query || visible) ? '' : 'none';
+  });
 }
 
-// ── COPILOT ──
-function toggleCP() {
-  document.getElementById('cppanel').classList.toggle('show');
+// UPLOAD SIM
+function simUpload(zone) {
+  const fid = 'files-' + zone;
+  const list = document.getElementById(fid);
+  if (!list) return;
+  const factsBody = list.closest('.card').nextElementSibling?.querySelector('.card-body');
+  if (factsBody) {
+    const skel = document.createElement('div');
+    skel.id = 'skel-' + Date.now();
+    skel.style.marginBottom = '14px';
+    skel.innerHTML = '<div style="font-size:12px;color:var(--gray-400);margin-bottom:8px">⚙ Extracting facts from New-Document.pdf…</div>' +
+      '<div class="skel" style="height:80px;margin-bottom:8px"></div>' +
+      '<div class="skel" style="height:60px;opacity:.6"></div>';
+    factsBody.insertAdjacentElement('afterbegin', skel);
+    setTimeout(() => { skel.remove(); toast('Facts extracted — 3 new topics added'); }, 2600);
+  }
+  const file = document.createElement('div');
+  file.className = 'file-item';
+  file.innerHTML = '<div class="file-ico pdf">📕</div><div class="file-info"><div class="file-name">New-Document.pdf</div><div class="file-meta"><span class="file-cat">Research</span>Uploading…</div></div>';
+  list.appendChild(file);
+  setTimeout(() => { file.querySelector('.file-meta').innerHTML = '<span class="file-cat">Research</span>EN · Just now'; }, 1200);
 }
+
+// REMOVE FILE
+function removeFile(btn) {
+  const item = btn.closest('.file-item');
+  item.style.transition = 'opacity .25s';
+  item.style.opacity = '0';
+  setTimeout(() => { item.remove(); toast('File removed'); }, 250);
+}
+
+// CITATIONS
 function toggleCit(id, e) {
   e.stopPropagation();
   const tip = document.getElementById(id);
-  const btn = e.currentTarget;
-  const open = tip.classList.contains('show');
-  document.querySelectorAll('.cittip.show').forEach(t => t.classList.remove('show'));
-  document.querySelectorAll('.citbtn.on').forEach(b => b.classList.remove('on'));
-  if (!open) { tip.classList.add('show'); btn.classList.add('on'); }
+  const wasOpen = tip.classList.contains('open');
+  document.querySelectorAll('.cit-tip').forEach(t => t.classList.remove('open'));
+  if (!wasOpen) tip.classList.add('open');
 }
-function goKB(t) {
-  document.getElementById('cppanel').classList.remove('show');
-  switchTab(t, document.getElementById('tab-'+t));
-  window.scrollTo({top:0,behavior:'smooth'});
-  toast('Navigated to '+{g:'Global',m:'Market',c:'Client',b:'Brand'}[t]+' Knowledge Bank');
-}
-function sendCP() {
-  const inp = document.getElementById('cpinput');
-  const msg = inp.value.trim();
-  if (!msg) return;
-  const msgs = document.getElementById('cpmsgs');
-  const um = document.createElement('div'); um.className = 'mu'; um.textContent = msg;
-  msgs.appendChild(um);
-  inp.value = '';
-  setTimeout(() => {
-    const am = document.createElement('div'); am.className = 'ma';
-    am.textContent = 'Analysing your question against the Knowledge Bank… (demo mode)';
-    msgs.appendChild(am);
-    msgs.scrollTop = msgs.scrollHeight;
-  }, 700);
-  msgs.scrollTop = msgs.scrollHeight;
+function goKB(tab) {
+  const tabEls = document.querySelectorAll('.tab');
+  const map = {global:0, market:1, client:2, brand:3};
+  tabEls.forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  tabEls[map[tab]].classList.add('active');
+  document.getElementById('pane-' + tab).classList.add('active');
+  document.querySelectorAll('.cit-tip').forEach(t => t.classList.remove('open'));
+  document.querySelector('.main').scrollTo({top:0, behavior:'smooth'});
+  toast('Navigated to ' + tab.charAt(0).toUpperCase() + tab.slice(1) + ' Knowledge Bank');
 }
 
-// ── UTILS ──
-function onCtx() { toast('Context updated'); }
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// MARKET SELECTOR
+function updateMarketContent(val) {
+  document.getElementById('market-content').style.display = val ? '' : 'none';
 }
+
+// TOAST
 function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('show'), 2500);
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(window._t);
+  window._t = setTimeout(() => el.classList.remove('show'), 2400);
 }
-
-// ── INIT ──
-applyPerms();
 </script>
 </body>
 </html>
