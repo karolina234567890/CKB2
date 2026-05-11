@@ -31,19 +31,20 @@ export default function DesignConsole() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA]">
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
       <div className="bg-white border-b border-gray-200 px-8 py-4">
         <h1 className="text-xl font-bold text-[#1A56A0]">Planning Console</h1>
       </div>
-      <div className="p-10">
-        <p className="text-gray-500 mb-8 text-sm">Select a tool to get started.</p>
-        <div className="flex flex-wrap gap-6">
+      <div className="flex-1 flex items-center justify-center p-10">
+        <div className="w-full max-w-4xl">
+          <p className="text-gray-500 mb-8 text-sm">Select a tool to get started.</p>
+          <div className="grid grid-cols-3 gap-6">
           {tools.map((tool) => (
             <div
               key={tool.id}
               onClick={() => tool.active && navigate(tool.path)}
               className={`
-                bg-white border border-gray-200 rounded-xl p-6 flex-1 min-w-[220px] max-w-xs shadow-sm transition-all
+                bg-white border border-gray-200 rounded-xl p-6 shadow-sm transition-all
                 ${tool.active
                   ? 'cursor-pointer hover:border-[#1A56A0] hover:shadow-md hover:-translate-y-0.5'
                   : 'opacity-50 cursor-not-allowed'}
@@ -63,6 +64,7 @@ export default function DesignConsole() {
               )}
             </div>
           ))}
+          </div>
         </div>
       </div>
     </div>
