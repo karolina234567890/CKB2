@@ -1,99 +1,329 @@
-export const TOPICS_TEMPLATE = [
-  {
-    id: 'topic-brand-positioning',
-    name: 'Brand Positioning',
-    subtitle: 'Promise, pillars, differentiation',
-    aiSummary:
-      'Client consistently positions around craftsmanship and trust. Premium-yet-approachable tone across all markets.',
-    facts: [
-      {
-        id: 'f1',
-        text: "Reinforces positioning around 'DEI media brief v1' — anchor on craftsmanship and trust.",
-        priority: 'High',
-        source: 'DEI media brief v1.pdf',
-        tags: ['#brand'],
-      },
-      {
-        id: 'f2',
-        text: 'Positioned as the premium-yet-approachable choice; promise of effortless craft.',
-        priority: 'High',
-        source: 'manual',
-        tags: ['#brand', '#positioning'],
-      },
-    ],
-  },
-  {
-    id: 'topic-target-audience',
-    name: 'Target Audience',
-    subtitle: 'Segments, personas, behaviours',
-    aiSummary:
-      'Core audience skews urban professional 28–44. Emerging sub-segment of younger design-conscious buyers identified in recent brief.',
-    facts: [
-      {
-        id: 'f3',
-        text: 'Core audience: 28–44, urban professionals, household income $90k+, design-conscious.',
-        priority: 'High',
-        source: 'manual',
-        tags: ['#brand'],
-      },
-      {
-        id: 'f4',
-        text: "Reference document highlights an emerging sub-audience surfaced in 'DEI media brief v1'.",
-        priority: 'Medium',
-        source: 'DEI media brief v1.pdf',
-        tags: [],
-      },
-    ],
-  },
-  {
-    id: 'topic-media-mix',
-    name: 'Media Mix Preferences',
-    subtitle: 'Channel priorities, budget split',
-    aiSummary:
-      'Strong preference for video and digital display. Search is mandatory. Out-of-home used selectively for awareness campaigns.',
-    facts: [
-      {
-        id: 'f5',
-        text: 'Video channels consistently outperform display in brand recall metrics across Q3 and Q4 2024.',
-        priority: 'High',
-        source: 'industry_benchmarks_q4.pdf',
-        tags: ['#media', '#video'],
-      },
-      {
-        id: 'f6',
-        text: 'Search is a mandatory inclusion in every campaign due to high-intent audience capture.',
-        priority: 'Medium',
-        source: 'manual',
-        tags: ['#search'],
-      },
-    ],
-  },
-];
-
-const makeSectionTopics = (section) => {
-  const prefixes = {
-    global: 'Across all markets, ',
-    market: 'In this market, ',
-    client: 'For this client, ',
-    brand: 'For this brand, ',
-  };
-  const prefix = prefixes[section] || '';
-  return TOPICS_TEMPLATE.map((topic, ti) => ({
-    ...topic,
-    id: `${section}-${topic.id}`,
-    aiSummary: prefix + topic.aiSummary.charAt(0).toLowerCase() + topic.aiSummary.slice(1),
-    facts: topic.facts.map((f, fi) => ({
-      ...f,
-      id: `${section}-${f.id}`,
-    })),
-  }));
-};
 
 export const INITIAL_KNOWLEDGE = {
-  global: makeSectionTopics('global'),
-  market: makeSectionTopics('market'),
-  client: makeSectionTopics('client'),
-  brand: makeSectionTopics('brand'),
+  global: [
+    {
+      id: 'global-topic-industry-benchmarks',
+      name: 'Industry Benchmarks',
+      subtitle: 'Cross-market performance standards',
+      aiSummary: 'Video consistently leads on brand recall globally (+32% vs display). CPC benchmarks vary widely by region — EMEA averages 18% higher than North America.',
+      facts: [
+        {
+          id: 'global-f1',
+          text: 'Video channels outperformed display in brand recall by +32% across all tracked markets in 2024.',
+          priority: 'High',
+          source: 'industry_benchmarks_q4.pdf',
+          tags: ['#video', '#benchmarks'],
+        },
+        {
+          id: 'global-f2',
+          text: 'Average click-through rate for premium display formats is 0.35% globally; native ads average 0.8%.',
+          priority: 'Medium',
+          source: 'global_media_trends_2024.pdf',
+          tags: ['#display', '#benchmarks'],
+        },
+        {
+          id: 'global-f3',
+          text: 'Connected TV (CTV) inventory grew 41% YoY across US, UK and DACH markets.',
+          priority: 'Medium',
+          source: 'global_media_trends_2024.pdf',
+          tags: ['#ctv', '#trends'],
+        },
+      ],
+    },
+    {
+      id: 'global-topic-digital-trends',
+      name: 'Digital Trends',
+      subtitle: 'Emerging channels, formats, tech',
+      aiSummary: 'Retail media and CTV are the two fastest-growing channels globally. AI-driven creative personalisation is becoming a standard expectation in RFPs.',
+      facts: [
+        {
+          id: 'global-f4',
+          text: 'Retail media ad spend is projected to surpass linear TV globally by Q3 2027 (source: GroupM forecast).',
+          priority: 'High',
+          source: 'global_media_trends_2024.pdf',
+          tags: ['#retail-media', '#forecast'],
+        },
+        {
+          id: 'global-f5',
+          text: 'Short-form video (under 15s) drives 2.4× higher completion rates than 30s pre-roll on mobile.',
+          priority: 'Medium',
+          source: 'industry_benchmarks_q4.pdf',
+          tags: ['#video', '#mobile'],
+        },
+      ],
+    },
+    {
+      id: 'global-topic-audience-insights',
+      name: 'Audience Insights',
+      subtitle: 'Global segments and behaviours',
+      aiSummary: 'Gen Z media consumption is highly fragmented across 6+ platforms. Cross-device attribution remains the top measurement challenge cited by global clients.',
+      facts: [
+        {
+          id: 'global-f6',
+          text: 'Gen Z (18–26) spends an average of 4.2h/day on mobile — 58% on social video platforms.',
+          priority: 'High',
+          source: 'global_media_trends_2024.pdf',
+          tags: ['#genz', '#mobile'],
+        },
+        {
+          id: 'global-f7',
+          text: 'Cookie deprecation has accelerated first-party data strategies — 67% of global advertisers now have a formal 1PD programme.',
+          priority: 'Medium',
+          source: 'industry_benchmarks_q4.pdf',
+          tags: ['#data', '#privacy'],
+        },
+      ],
+    },
+  ],
+
+  market: [
+    {
+      id: 'market-topic-market-landscape',
+      name: 'Market Landscape',
+      subtitle: 'Local media environment & dynamics',
+      aiSummary: 'US digital ad market is the most competitive globally. Programmatic accounts for 91% of display spend. Linear TV is declining but still relevant for broad reach.',
+      facts: [
+        {
+          id: 'market-f1',
+          text: 'US programmatic display accounts for 91% of total digital display spend in 2025 (eMarketer).',
+          priority: 'High',
+          source: 'industry_benchmarks_q4.pdf',
+          tags: ['#programmatic', '#us'],
+        },
+        {
+          id: 'market-f2',
+          text: 'Linear TV viewership declined 9% YoY in the US but still reaches 72% of adults 35+ weekly.',
+          priority: 'Medium',
+          source: 'global_media_trends_2024.pdf',
+          tags: ['#tv', '#reach'],
+        },
+        {
+          id: 'market-f3',
+          text: 'Amazon Ads is now the #3 digital ad platform in the US, capturing 14.6% of digital ad revenue.',
+          priority: 'Low',
+          source: 'industry_benchmarks_q4.pdf',
+          tags: ['#retail-media', '#us'],
+        },
+      ],
+    },
+    {
+      id: 'market-topic-local-audience',
+      name: 'Local Audience Profile',
+      subtitle: 'US consumer behaviour & media habits',
+      aiSummary: 'US consumers are highly receptive to personalised advertising. Hispanic and multicultural segments are fastest-growing and underserved by most media plans.',
+      facts: [
+        {
+          id: 'market-f4',
+          text: 'Hispanic adults in the US consume 30% more digital video than the general population average.',
+          priority: 'High',
+          source: 'global_media_trends_2024.pdf',
+          tags: ['#audience', '#diversity'],
+        },
+        {
+          id: 'market-f5',
+          text: '62% of US adults say they prefer personalised ads over generic ones when the data use is transparent.',
+          priority: 'Medium',
+          source: 'manual',
+          tags: ['#personalisation', '#trust'],
+        },
+      ],
+    },
+    {
+      id: 'market-topic-competitive-activity',
+      name: 'Competitive Activity',
+      subtitle: 'Category spend & share of voice',
+      aiSummary: 'Main competitor increased digital share of voice by 12pp in Q4 2025. Premium lifestyle category spend is up 18% YoY, with strong OOH investment in urban centres.',
+      facts: [
+        {
+          id: 'market-f6',
+          text: "Key competitor 'LuxeCraft' grew digital SOV from 22% to 34% in Q4 2025, primarily via YouTube and CTV.",
+          priority: 'High',
+          source: 'manual',
+          tags: ['#competitive', '#sov'],
+        },
+        {
+          id: 'market-f7',
+          text: 'Premium lifestyle category total ad spend in the US grew 18% YoY to $2.4B in 2025.',
+          priority: 'Medium',
+          source: 'industry_benchmarks_q4.pdf',
+          tags: ['#category', '#spend'],
+        },
+      ],
+    },
+  ],
+
+  client: [
+    {
+      id: 'client-topic-brand-positioning',
+      name: 'Brand Positioning',
+      subtitle: 'Promise, pillars, differentiation',
+      aiSummary: 'Client positions around craftsmanship and trust. Premium-yet-approachable tone is the proven anchor. Avoid aggressive price messaging — it conflicts with brand equity.',
+      facts: [
+        {
+          id: 'client-f1',
+          text: "Core brand promise: 'effortless craft' — reinforced in every touchpoint from DEI media brief v1.",
+          priority: 'High',
+          source: 'DEI media brief v1.pdf',
+          tags: ['#brand', '#positioning'],
+        },
+        {
+          id: 'client-f2',
+          text: 'Avoid price-led messaging in any channel — client research shows it reduces brand preference by 11pts.',
+          priority: 'High',
+          source: 'manual',
+          tags: ['#brand', '#rules'],
+        },
+        {
+          id: 'client-f3',
+          text: 'Brand colour palette: midnight navy + warm gold. Never use red — reserved for a competitor.',
+          priority: 'Low',
+          source: 'DEI media brief v1.pdf',
+          tags: ['#creative', '#identity'],
+        },
+      ],
+    },
+    {
+      id: 'client-topic-target-audience',
+      name: 'Target Audience',
+      subtitle: 'Approved segments and personas',
+      aiSummary: 'Primary: urban professionals 28–44, HHI $90k+. Secondary: aspirational 22–27 segment growing fast. Client has explicit opt-out from targeting under-18s on any platform.',
+      facts: [
+        {
+          id: 'client-f4',
+          text: 'Primary target: 28–44, urban professionals, HHI $90k+, high design affinity — signed off in annual brief.',
+          priority: 'High',
+          source: 'DEI media brief v1.pdf',
+          tags: ['#audience', '#approved'],
+        },
+        {
+          id: 'client-f5',
+          text: 'Client mandates zero targeting of users under 18 across all platforms, including contextual.',
+          priority: 'High',
+          source: 'manual',
+          tags: ['#compliance', '#audience'],
+        },
+        {
+          id: 'client-f6',
+          text: 'Secondary emerging segment: aspirational 22–27 design-conscious buyers — approved for test-and-learn budget in H2 2026.',
+          priority: 'Medium',
+          source: 'DEI media brief v1.pdf',
+          tags: ['#audience', '#emerging'],
+        },
+      ],
+    },
+    {
+      id: 'client-topic-historical-performance',
+      name: 'Historical Performance',
+      subtitle: 'Past campaign results & learnings',
+      aiSummary: 'Q3 2025 campaign over-delivered on reach but underperformed on brand uplift. Video creative under 20s drove the best results. Search ROAS consistently above 4.0×.',
+      facts: [
+        {
+          id: 'client-f7',
+          text: 'Q3 2025: video ads under 20s drove +19% brand recall vs 30s format at 40% lower CPM.',
+          priority: 'High',
+          source: 'industry_benchmarks_q4.pdf',
+          tags: ['#video', '#creative', '#results'],
+        },
+        {
+          id: 'client-f8',
+          text: 'Search consistently delivers ROAS above 4.0× — never reduce search budget below 15% of total.',
+          priority: 'High',
+          source: 'manual',
+          tags: ['#search', '#roas'],
+        },
+        {
+          id: 'client-f9',
+          text: 'OOH in Q2 2025 drove +6% unaided awareness in 3 key metro areas — recommend replication.',
+          priority: 'Medium',
+          source: 'manual',
+          tags: ['#ooh', '#awareness'],
+        },
+      ],
+    },
+  ],
+
+  brand: [
+    {
+      id: 'brand-topic-brand-identity',
+      name: 'Brand Identity',
+      subtitle: 'Visual language and tone of voice',
+      aiSummary: 'Alpha Brand uses a refined, editorial visual style. Photography-first creative direction. Tone is confident and warm — never corporate or clinical.',
+      facts: [
+        {
+          id: 'brand-f1',
+          text: 'Primary visual style: editorial photography, natural lighting, lifestyle contexts — no studio white backgrounds.',
+          priority: 'High',
+          source: 'DEI media brief v1.pdf',
+          tags: ['#creative', '#visual'],
+        },
+        {
+          id: 'brand-f2',
+          text: 'Tone of voice: confident, warm, slightly understated. Never use exclamation marks in copy.',
+          priority: 'Medium',
+          source: 'manual',
+          tags: ['#tov', '#copy'],
+        },
+      ],
+    },
+    {
+      id: 'brand-topic-product-portfolio',
+      name: 'Product Portfolio',
+      subtitle: 'Hero products and seasonal focus',
+      aiSummary: 'Three hero SKUs account for 68% of revenue. Seasonal collections launch in March and September — media investment should front-load 3 weeks ahead of retail.',
+      facts: [
+        {
+          id: 'brand-f3',
+          text: 'Hero SKUs: Artisan Series, Classic Core, Limited Edition — together representing 68% of brand revenue.',
+          priority: 'High',
+          source: 'DEI media brief v1.pdf',
+          tags: ['#product', '#portfolio'],
+        },
+        {
+          id: 'brand-f4',
+          text: 'Seasonal collections (Spring/Autumn) require media to launch 3 weeks before retail availability to build demand.',
+          priority: 'High',
+          source: 'manual',
+          tags: ['#seasonal', '#timing'],
+        },
+        {
+          id: 'brand-f5',
+          text: 'Limited Edition drops are always surprise launches — no pre-announcement media allowed.',
+          priority: 'Low',
+          source: 'manual',
+          tags: ['#product', '#rules'],
+        },
+      ],
+    },
+    {
+      id: 'brand-topic-channel-guidelines',
+      name: 'Channel Guidelines',
+      subtitle: 'Approved placements and formats',
+      aiSummary: 'Brand has strict placement exclusions — no UGC environments, no news adjacency. Instagram and Pinterest are primary social channels. TikTok is under review.',
+      facts: [
+        {
+          id: 'brand-f6',
+          text: 'Brand safety: exclude all UGC environments, news adjacency, and political content on all platforms.',
+          priority: 'High',
+          source: 'DEI media brief v1.pdf',
+          tags: ['#brand-safety', '#compliance'],
+        },
+        {
+          id: 'brand-f7',
+          text: 'Approved social channels: Instagram, Pinterest, YouTube. TikTok currently under legal review — do not activate.',
+          priority: 'High',
+          source: 'manual',
+          tags: ['#social', '#approved'],
+        },
+        {
+          id: 'brand-f8',
+          text: 'Minimum creative specs: video 1080p, static 300×600 and 970×250 as mandatory sizes for display.',
+          priority: 'Low',
+          source: 'DEI media brief v1.pdf',
+          tags: ['#creative', '#specs'],
+        },
+      ],
+    },
+  ],
 };
 
 export const MOCK_FILES = [
