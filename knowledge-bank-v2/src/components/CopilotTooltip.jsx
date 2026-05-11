@@ -6,7 +6,7 @@ export default function CopilotTooltip({ sources, onClose }) {
 
   const handleView = (source) => {
     if (source.topicId && source.section) {
-      navigate(`/knowledge-bank#${source.topicId}`);
+      navigate(`/knowledge-bank?section=${source.section}&topic=${source.topicId}`);
     }
   };
 

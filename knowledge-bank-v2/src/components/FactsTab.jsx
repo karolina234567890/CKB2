@@ -1,13 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import TopicCard from './TopicCard';
 import { useKnowledge } from '../context/KnowledgeContext';
 
-export default function FactsTab({ section, canEdit }) {
+export default function FactsTab({ section, canEdit, highlightedTopicId }) {
   const { knowledge, addFact, updateFact, deleteFact } = useKnowledge();
   const topics = knowledge[section] || [];
-  const location = useLocation();
-  const highlightedTopicId = location.hash ? location.hash.slice(1) : null;
 
   return (
     <div className="space-y-4">
