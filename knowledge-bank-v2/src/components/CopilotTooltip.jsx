@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { LevelBadge } from './LevelBadge';
 
-export default function CopilotTooltip({ sources, onClose }) {
+export default function CopilotTooltip({ sources }) {
   const navigate = useNavigate();
 
   const handleView = (source) => {
@@ -12,7 +12,7 @@ export default function CopilotTooltip({ sources, onClose }) {
 
   return (
     <div
-      className="absolute z-50 bg-white border border-gray-200 rounded-xl shadow-xl w-80 right-full mr-3 top-0"
+      className="absolute z-50 bg-white border border-gray-200 rounded-xl shadow-xl w-80 right-0 top-full mt-2"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="px-4 py-3 border-b border-gray-100">
