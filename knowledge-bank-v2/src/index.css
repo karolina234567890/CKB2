@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #F8F9FA;
+  color: #1A1A1A;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  text-align: left;
+}
+
+@keyframes highlight-fade {
+  0% { background-color: #FEF9C3; }
+  100% { background-color: transparent; }
+}
+
+.topic-highlight {
+  animation: highlight-fade 2.5s ease-out forwards;
+  border-radius: 8px;
+}
