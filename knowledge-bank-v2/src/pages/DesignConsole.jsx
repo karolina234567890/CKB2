@@ -37,13 +37,13 @@ export default function DesignConsole() {
       </div>
       <div className="p-10">
         <p className="text-gray-500 mb-8 text-sm">Select a tool to get started.</p>
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6">
           {tools.map((tool) => (
             <div
               key={tool.id}
               onClick={() => tool.active && navigate(tool.path)}
               className={`
-                bg-white border border-gray-200 rounded-xl p-6 w-72 shadow-sm transition-all
+                bg-white border border-gray-200 rounded-xl p-6 flex-1 min-w-[220px] max-w-xs shadow-sm transition-all
                 ${tool.active
                   ? 'cursor-pointer hover:border-[#1A56A0] hover:shadow-md hover:-translate-y-0.5'
                   : 'opacity-50 cursor-not-allowed'}

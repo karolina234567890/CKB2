@@ -114,7 +114,7 @@ export default function MediaPlan() {
         <main className="flex-1 overflow-y-auto p-8">
           <h2 className="text-lg font-bold text-[#1A1A1A] mb-6">Media Plan Details</h2>
 
-          <div className="space-y-6 max-w-2xl">
+          <div className="space-y-6 w-full max-w-3xl">
             {/* Client Brief */}
             <section className="bg-white border border-gray-200 rounded-xl p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-4">Client Brief</h3>
