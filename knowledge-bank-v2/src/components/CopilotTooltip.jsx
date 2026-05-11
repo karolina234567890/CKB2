@@ -13,7 +13,6 @@ export default function CopilotTooltip({ sources, onClose }) {
   return (
     <div
       className="absolute z-50 bg-white border border-gray-200 rounded-xl shadow-xl w-80 right-full mr-3 top-0"
-      onMouseLeave={onClose}
       onClick={(e) => e.stopPropagation()}
     >
       <div className="px-4 py-3 border-b border-gray-100">
