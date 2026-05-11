@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter as BrowserRouter, Routes, Route } from 'react-router-dom';
 import { KnowledgeProvider } from './context/KnowledgeContext';
 import DesignConsole from './pages/DesignConsole';
 import KnowledgeBank from './pages/KnowledgeBank';

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import FilesTab from '../components/FilesTab';
 import FactsTab from '../components/FactsTab';
@@ -23,24 +23,19 @@ const CAN_EDIT = {
 const TABS = ['Facts', 'Files'];
 
 export default function KnowledgeBank() {
-  const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [activeSection, setActiveSection] = useState('global');
+  const paramSection = searchParams.get('section');
+  const paramTopic = searchParams.get('topic');
+
+  const [activeSection, setActiveSection] = useState(
+    SECTIONS.find((s) => s.id === paramSection) ? paramSection : 'global'
+  );
   const [activeTab, setActiveTab] = useState('Facts');
   const [selectedMarket, setSelectedMarket] = useState('United States');
 
-  useEffect(() => {
-    const hash = location.hash?.slice(1);
-    if (!hash) return;
-
-    const sectionMatch = SECTIONS.find((s) => hash.startsWith(`${s.id}-`));
-    if (sectionMatch) {
-      setActiveSection(sectionMatch.id);
-      setActiveTab('Facts');
-    }
-  }, [location.hash]);
-
+  const highlightedTopicId = paramTopic || null;
   const canEdit = CAN_EDIT[activeSection];
 
   return (
@@ -122,7 +117,7 @@ export default function KnowledgeBank() {
 
             {/* Content */}
             {activeTab === 'Facts' && (
-              <FactsTab section={activeSection} canEdit={canEdit} />
+              <FactsTab section={activeSection} canEdit={canEdit} highlightedTopicId={highlightedTopicId} />
             )}
             {activeTab === 'Files' && (
               <FilesTab canEdit={canEdit} />
