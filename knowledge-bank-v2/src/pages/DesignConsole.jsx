@@ -35,8 +35,8 @@ export default function DesignConsole() {
       <div className="bg-white border-b border-gray-200 px-8 py-4">
         <h1 className="text-xl font-bold text-[#1A56A0]">Planning Console</h1>
       </div>
-      <div className="flex-1 flex items-center justify-center p-10">
-        <div className="w-full max-w-4xl">
+      <div className="p-10">
+        <div className="w-full max-w-4xl mx-auto">
           <p className="text-gray-500 mb-8 text-sm">Select a tool to get started.</p>
           <div className="grid grid-cols-3 gap-6">
           {tools.map((tool) => (
