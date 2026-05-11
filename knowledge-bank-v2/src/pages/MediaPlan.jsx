@@ -59,11 +59,9 @@ export default function MediaPlan() {
       <div className="h-14 bg-white border-b border-gray-200 flex items-center px-6 gap-4 flex-shrink-0">
         <span className="font-bold text-[#1A56A0] text-base mr-4">Planning Console</span>
         <div className="flex items-center gap-2 text-xs text-gray-400">
-          <button onClick={() => navigate('/')} className="hover:text-gray-600">Home</button>
+          <button onClick={() => navigate('/')} className="hover:text-[#1A56A0] transition-colors">Planning Console</button>
           <span>›</span>
-          <button onClick={() => navigate('/planning-agent')} className="hover:text-gray-600">Planning Console</button>
-          <span>›</span>
-          <button onClick={() => navigate('/planning-agent')} className="hover:text-gray-600">Planning Agent</button>
+          <button onClick={() => navigate('/planning-agent')} className="hover:text-[#1A56A0] transition-colors">Planning Agent</button>
           <span>›</span>
           <span className="text-gray-700 font-medium">{plan.name}</span>
         </div>

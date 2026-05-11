@@ -64,10 +64,8 @@ export default function PlanningAgent() {
       <TopBarPA market={market} setMarket={setMarket} />
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100 px-6 py-2 text-xs text-gray-400 flex gap-2">
-        <span>Home</span>
-        <span>›</span>
-        <span>Planning Console</span>
+      <div className="bg-white border-b border-gray-100 px-6 py-2 text-xs text-gray-400 flex gap-2 items-center">
+        <button onClick={() => navigate('/')} className="hover:text-[#1A56A0] transition-colors">Planning Console</button>
         <span>›</span>
         <span className="text-gray-700 font-medium">Planning Agent</span>
       </div>

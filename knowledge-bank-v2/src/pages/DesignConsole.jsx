@@ -33,7 +33,7 @@ export default function DesignConsole() {
   return (
     <div className="min-h-screen bg-[#F8F9FA]">
       <div className="bg-white border-b border-gray-200 px-8 py-4">
-        <h1 className="text-xl font-bold text-[#1A56A0]">Design Console</h1>
+        <h1 className="text-xl font-bold text-[#1A56A0]">Planning Console</h1>
       </div>
       <div className="p-10">
         <p className="text-gray-500 mb-8 text-sm">Select a tool to get started.</p>
