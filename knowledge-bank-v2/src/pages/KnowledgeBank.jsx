@@ -42,7 +42,7 @@ export default function KnowledgeBank() {
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
       <TopBar
         breadcrumbs={[
-          { label: 'Design Console', to: '/' },
+          { label: 'Planning Console', to: '/' },
           { label: 'Knowledge Bank' },
         ]}
       />
